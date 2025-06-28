@@ -1,0 +1,28 @@
+# Node modules (don’t push 1000s of files)
+node_modules/
+
+# TypeScript output folder
+dist/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Logs & debug stuff
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# VS Code workspace settings
+.vscode/
+
+# Build cache
+*.tsbuildinfo
+
+# Env variables (if added later)
+.env
+.env.*
+
+# Optional: macOS & Linux swap files
+*.swp
+*.swo
