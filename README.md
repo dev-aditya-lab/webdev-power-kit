@@ -5,8 +5,7 @@
 
 # Webdev Power Kit ⚡
 
-A modern JavaScript toolkit that makes using powerful browser features super easy.  
-Copy to clipboard, send notifications, check battery level, vibrate device, and more — all in just one line.
+webdev-power-kit is designed to supercharge the productivity of web developers by exposing powerful browser capabilities with simple, beginner-friendly functions. Whether you’re building dashboards, mobile-friendly apps, or learning the Web APIs — this toolkit makes it easy, efficient, and fun.
 
 ---
 
