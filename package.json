@@ -41,7 +41,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "start": "node ./examples/index.js",
+    "start": "echo 'Open ./test/index.html to test in browser'",
     "test": "echo \"No tests yet\"",
     "build": "echo 'No build step required for pure JS'"
   },

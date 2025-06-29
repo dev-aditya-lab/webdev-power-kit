@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Webdev Power Kit Test</title>
+</head>
+<body>
+  <h2>Clipboard Test</h2>
+  <button id="copy">Copy Text</button>
+  <button id="read">Read Clipboard</button>
+  <p id="result"></p>
+
+  <script type="module">
+    import { copyToClipboard, readClipboard } from '../src/index.js';
+
+    document.getElementById("copy").onclick = () => {
+      copyToClipboard("Bhai OP hai!")
+        .then(() => alert("Text Copied!"));
+    };
+
+    document.getElementById("read").onclick = async () => {
+      const text = await readClipboard();
+      document.getElementById("result").textContent = `Clipboard: ${text}`;
+    };
+  </script>
+</body>
+</html>
