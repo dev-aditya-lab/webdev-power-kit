@@ -18,7 +18,7 @@ You can use it directly in your browser using **Skypack CDN** or **jsDelivr**.
 > ✅ Works in `type="module"` script
 > ⚠️ Works only on `https` or `localhost` due to browser API restrictions.
 
-### ✅ Example using [Skypack CDN](https://cdn.skypack.dev)
+### ✅ Example using **[jsDelivr](https://cdn.jsdelivr.net/npm/webdev-power-kit/+esm)**
 
 ```html
 <!DOCTYPE html>
@@ -30,7 +30,7 @@ You can use it directly in your browser using **Skypack CDN** or **jsDelivr**.
   <button id="copyBtn">Copy to Clipboard</button>
 
   <script type="module">
-    import { copyToClipboard } from 'https://cdn.skypack.dev/webdev-power-kit';
+    import { copyToClipboard } from 'https://cdn.jsdelivr.net/npm/webdev-power-kit/+esm';
 
     document.getElementById("copyBtn").addEventListener("click", () => {
       copyToClipboard("Text from WebDev Power Kit!");
@@ -237,6 +237,66 @@ Charging: No
 | Firefox | ❌          | Removed support in recent versions |
 | Safari  | ❌          | Not supported                      |
 | Android | ✅          | Mostly supported                   |
+
+---
+
+
+# 📳 Vibration API – webdev-power-kit
+
+This module lets you trigger device vibration using the native Vibration API — great for haptic feedback in mobile web apps.
+
+#### 👉 Use a real Android/iPhone browser to test (won't work on most laptops/desktops).
+
+---
+
+## ✨ Features
+
+* Vibrate device on click, error, success, etc.
+* Supports single duration or pattern
+* Uses built-in `navigator.vibrate()` method
+* Works best on **mobile browsers**
+
+---
+
+## ✅ Functions
+
+### 1. `vibrate(pattern)`
+
+📌 Vibrates the user’s device using a simple number or a pattern array.
+
+```js
+import { vibrate } from "webdev-power-kit";
+
+// Vibrate for 200ms
+vibrate(200);
+
+// Vibrate for 300ms, pause 100ms, vibrate 300ms again
+vibrate([300, 100, 300]);
+```
+
+#### 📥 Parameters:
+
+| Param   | Type                   | Description                                               |
+| ------- | ---------------------- | --------------------------------------------------------- |
+| pattern | `number` or `number[]` | Single duration or array of vibration & pause times in ms |
+
+#### 🔁 Returns:
+
+* `true` → if vibration triggered
+* `false` → if not supported by browser/device
+
+
+---
+
+## 🔐 Browser Support
+
+| Browser | Supported? | Notes                         |
+| ------- | ---------- | ----------------------------- |
+| Chrome  | ✅          | Fully supported (mobile only) |
+| Edge    | ✅          | Same as Chrome                |
+| Firefox | ✅          | Mobile version supported      |
+| Safari  | ⚠️         | Limited / No support          |
+| Desktop | ❌          | Mostly not supported          |
 
 ---
 
