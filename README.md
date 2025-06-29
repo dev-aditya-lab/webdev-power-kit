@@ -303,6 +303,82 @@ vibrate([300, 100, 300]);
 
 
 
+# 🌐 Network API – webdev-power-kit
+
+This module allows you to detect the internet connection status of the browser and listen for changes in real-time.
+
+---
+
+## ✨ Features
+
+* Check if user is currently online or offline
+* Listen for real-time status changes
+* Helpful for offline alerts, syncing, and caching
+* Uses built-in `navigator.onLine` and browser events
+
+---
+
+## ✅ Functions
+
+### 1. `isOnline()`
+
+📌 Returns the current network status (online or offline).
+
+```js
+import { isOnline } from "webdev-power-kit";
+
+if (isOnline()) {
+  console.log("You are online!");
+} else {
+  console.log("You are offline!");
+}
+```
+
+#### 🔁 Returns:
+
+* `true` → if user is online
+* `false` → if user is offline
+
+---
+
+### 2. `listenNetworkStatus(callback)`
+
+📌 Listens for online/offline status changes and runs a callback with the updated status.
+
+```js
+import { listenNetworkStatus } from "webdev-power-kit";
+
+listenNetworkStatus((status) => {
+  console.log("Network status:", status ? "Online ✅" : "Offline ❌");
+});
+```
+
+#### 📥 Parameters:
+
+| Param      | Type                        | Description                                           |
+| ---------- | --------------------------- | ----------------------------------------------------- |
+| `callback` | `(status: boolean) => void` | Function called with true (online) or false (offline) |
+
+#### 🔁 Returns:
+
+* A function to unsubscribe and stop listening
+
+---
+
+## 🔐 Browser Support
+
+| Browser | Supported? | Notes                      |
+| ------- | ---------- | -------------------------- |
+| Chrome  | ✅          | Fully supported            |
+| Firefox | ✅          | Fully supported            |
+| Edge    | ✅          | Fully supported            |
+| Safari  | ✅          | Fully supported            |
+| Mobile  | ✅          | Works well on most devices |
+
+---
+
+
+
 
 
 

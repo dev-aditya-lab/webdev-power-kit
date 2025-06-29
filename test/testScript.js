@@ -1,6 +1,17 @@
 import { copyToClipboard, readClipboard } from '../src/index.js';
 import { sendNotification } from '../src/index.js';
 import { getBatteryStatus } from '../src/index.js';
+import { isOnline, listenNetworkStatus } from "../src/index.js";
+
+const statusText = document.getElementById("status");
+
+listenNetworkStatus((isOnline) => {
+  statusText.textContent = isOnline
+    ? "✅ You are online"
+    : "❌ You are offline";
+  statusText.style.color = isOnline ? "green" : "red";
+});
+
 
 document.getElementById("battery").onclick = async () => {
   try {
