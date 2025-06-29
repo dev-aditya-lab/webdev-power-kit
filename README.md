@@ -463,6 +463,70 @@ listenTabVisibility((visible) => {
 
 ---
 
+# 🛑 Prevent Tab Close API – webdev-power-kit
+
+This module allows you to warn users before they close or refresh the tab — perfect for preventing loss of unsaved data or accidental exits.
+
+---
+
+## ✨ Features
+
+* Trigger a warning before tab is closed or reloaded
+* Easy toggle with a single function call
+* Uses native `beforeunload` event
+* Useful for forms, editors, and critical workflows
+
+---
+
+## ✅ Functions
+
+### 1. `preventTabClose(enable)`
+
+📌 Enables or disables tab close protection.
+
+```js
+import { preventTabClose } from "webdev-power-kit";
+
+// Enable protection
+preventTabClose(true);
+
+// Disable protection
+preventTabClose(false);
+```
+
+#### 📥 Parameters:
+
+| Param  | Type    | Description                                 |
+| ------ | ------- | ------------------------------------------- |
+| enable | boolean | Set to `true` to enable, `false` to disable |
+
+#### 🔁 Returns:
+
+* `void`
+
+---
+
+## 🔐 Browser Support
+
+| Browser | Supported? | Notes                               |
+| ------- | ---------- | ----------------------------------- |
+| Chrome  | ✅          | Shows a confirmation dialog         |
+| Firefox | ✅          | Shows built-in warning message      |
+| Edge    | ✅          | Supported                           |
+| Safari  | ✅          | Limited message customization       |
+| Mobile  | ⚠️         | May not work on all mobile browsers |
+
+---
+
+## 💡 Use Cases
+
+* Prevent form data loss
+* Alert user during critical flows (payment, editing)
+* Confirm before logging out or exiting dashboard
+* Protect unsaved changes in web editors
+
+---
+
 
 
 ## 📄 License
