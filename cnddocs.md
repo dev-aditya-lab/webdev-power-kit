@@ -1,82 +1,51 @@
 
-# 🌙 Dark Mode API – webdev-power-kit
+## 🌐 CDN Usage (Vanilla HTML + JS)
 
-This module detects whether the user prefers dark or light mode, and lets you listen to theme changes in real-time using the system’s color scheme preference.
+You can use it directly in your browser using **Skypack CDN** or **jsDelivr**.
 
----
+> ✅ Works in `type="module"` script
+> ⚠️ Works only on `https` or `localhost` due to browser API restrictions.
 
-## ✨ Features
+### ✅ Example using **[jsDelivr](https://cdn.jsdelivr.net/npm/webdev-power-kit/+esm)**
 
-* Detect if dark mode is enabled by system/browser
-* Listen for real-time theme changes
-* Useful for automatic theming or toggles
-* Uses native `window.matchMedia`
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>WebDev Power Kit - CDN Example</title>
+</head>
+<body>
+  <button id="copyBtn">Copy to Clipboard</button>
 
----
+  <script type="module">
+    import { copyToClipboard } from 'https://cdn.jsdelivr.net/npm/webdev-power-kit/+esm';
 
-## ✅ Functions
-
-### 1. `isDarkMode()`
-
-📌 Returns whether the user’s system prefers dark mode.
-
-```js
-import { isDarkMode } from "webdev-power-kit";
-
-if (isDarkMode()) {
-  console.log("🌙 Dark mode is enabled");
-} else {
-  console.log("☀️ Light mode is enabled");
-}
+    document.getElementById("copyBtn").addEventListener("click", () => {
+      copyToClipboard("Text from WebDev Power Kit!");
+      alert("Text copied ✅");
+    });
+  </script>
+</body>
+</html>
 ```
 
-#### 🔁 Returns:
-
-* `true` → if user prefers dark mode
-* `false` → if light mode is preferred
-
 ---
 
-### 2. `listenDarkMode(callback)`
+### 🔁 CDN Mirror Options
 
-📌 Listen to changes in the system theme (dark ↔️ light) in real-time.
-
-```js
-import { listenDarkMode } from "webdev-power-kit";
-
-listenDarkMode((isDark) => {
-  console.log("Theme changed:", isDark ? "Dark" : "Light");
-});
+- **[jsDelivr](https://cdn.jsdelivr.net/npm/webdev-power-kit/+esm)**
+```url
+https://cdn.jsdelivr.net/npm/webdev-power-kit/+esm
 ```
 
-#### 📥 Parameters:
+- **[UNPKG](https://unpkg.com/webdev-power-kit/+esm)**
+```url
+https://unpkg.com/webdev-power-kit/+esm
+```
 
-| Param      | Type                        | Description                                              |
-| ---------- | --------------------------- | -------------------------------------------------------- |
-| `callback` | `(isDark: boolean) => void` | Called with `true` for dark mode, `false` for light mode |
-
-#### 🔁 Returns:
-
-* A function to unsubscribe and stop listening
-
----
-
-## 🔐 Browser Support
-
-| Browser | Supported? | Notes                            |
-| ------- | ---------- | -------------------------------- |
-| Chrome  | ✅          | Fully supported                  |
-| Firefox | ✅          | Fully supported                  |
-| Edge    | ✅          | Fully supported                  |
-| Safari  | ✅          | Fully supported (macOS/iOS only) |
-| Mobile  | ✅          | Most modern devices supported    |
+- **[Skypack](https://cdn.skypack.dev/webdev-power-kit)**
+```url
+https://cdn.skypack.dev/webdev-power-kit
+```
 
 ---
-
-## 💡 Use Cases
-
-* Auto-switch theme on page load
-* Show theme toggle suggestion
-* Sync app theme with OS settings
-* Apply different CSS styles dynamically
-
