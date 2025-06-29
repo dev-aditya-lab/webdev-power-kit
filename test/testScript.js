@@ -3,17 +3,22 @@ import { sendNotification } from '../src/index.js';
 import { getBatteryStatus } from '../src/index.js';
 import { isOnline, listenNetworkStatus } from "../src/index.js";
 import { listenTabVisibility } from "../src/index.js";
-  import { preventTabClose } from "../src/index.js";
+import { preventTabClose } from "../src/index.js";
+import { startIdleTimer } from "../src/index.js";
 
-  document.getElementById("enable").onclick = () => {
-    preventTabClose(true);
-    alert("Tab close protection enabled.");
-  };
+startIdleTimer(5, () => {
+  document.getElementById("idle").textContent = "💤 You are idle!";
+});
 
-  document.getElementById("disable").onclick = () => {
-    preventTabClose(false);
-    alert("Tab close protection disabled.");
-  };
+document.getElementById("enable").onclick = () => {
+  preventTabClose(true);
+  alert("Tab close protection enabled.");
+};
+
+document.getElementById("disable").onclick = () => {
+  preventTabClose(false);
+  alert("Tab close protection disabled.");
+};
 
 listenTabVisibility((visible) => {
   document.getElementById("tab-status").textContent =

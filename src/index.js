@@ -5,3 +5,4 @@ export * from './vibration.js';
 export * from './network.js';
 export * from './tabVisibility.js';
 export * from './preventClose.js';
+export * from './idleTimer.js';

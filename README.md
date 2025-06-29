@@ -527,6 +527,70 @@ preventTabClose(false);
 
 ---
 
+# ⏱️ Idle Timer API – webdev-power-kit
+
+This module helps you detect when a user becomes inactive (idle) for a certain amount of time — perfect for auto-logout, showing alerts, or stopping background activity.
+
+---
+
+## ✨ Features
+
+* Track if user is inactive for X seconds
+* Automatically resets on any activity (scroll, key, mouse, touch)
+* Lightweight and easy to use
+* Uses native browser events
+
+---
+
+## ✅ Functions
+
+### 1. `startIdleTimer(seconds, onIdle)`
+
+📌 Starts tracking user activity and runs your callback when idle.
+
+```js
+import { startIdleTimer } from "webdev-power-kit";
+
+// Run after 10 seconds of inactivity
+startIdleTimer(10, () => {
+  console.log("💤 User is idle!");
+});
+```
+
+#### 📥 Parameters:
+
+| Param     | Type       | Description                                     |
+| --------- | ---------- | ----------------------------------------------- |
+| `seconds` | `number`   | Time in seconds to wait before calling `onIdle` |
+| `onIdle`  | `function` | Callback function to run when user becomes idle |
+
+#### 🔁 Returns:
+
+* `() => void` — A function to stop and clean up the idle timer
+
+---
+
+## 🔐 Browser Support
+
+| Browser | Supported? | Notes           |
+| ------- | ---------- | --------------- |
+| Chrome  | ✅          | Fully supported |
+| Firefox | ✅          | Fully supported |
+| Edge    | ✅          | Fully supported |
+| Safari  | ✅          | Fully supported |
+| Mobile  | ✅          | Fully supported |
+
+---
+
+## 💡 Use Cases
+
+* Auto-logout after inactivity
+* Show “You’re idle” banner
+* Pause API polling when user is inactive
+* Lock app after idle timeout in sensitive dashboards
+---
+
+
 
 
 ## 📄 License
