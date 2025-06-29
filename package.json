@@ -42,7 +42,7 @@
   ],
   "scripts": {
     "start": "echo 'Open ./test/index.html to test in browser'",
-    "test": "echo \"No tests yet\"",
+    "test": "./test/testScript.js",
     "build": "echo 'No build step required for pure JS'"
   },
   "engines": {

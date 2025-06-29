@@ -128,3 +128,63 @@ sendNotification("Hello Dev!", {
 
 ---
 
+
+# 🔋 Battery API – webdev-power-kit
+
+This module helps you get real-time info about your device’s battery level and charging status using the built-in Battery Status API.
+
+---
+
+## ✨ Features
+
+* Get current battery level (0–100%)
+* Check whether device is charging or not
+* Easy one-liner function
+* Uses native `navigator.getBattery()` API
+
+---
+
+## ✅ Functions
+
+### 1. `getBatteryStatus()`
+
+📌 Get battery percentage and charging state.
+
+```js
+import { getBatteryStatus } from "webdev-power-kit";
+
+const battery = await getBatteryStatus();
+console.log(`Battery: ${battery.level}%`);
+console.log(`Charging: ${battery.charging ? "Yes" : "No"}`);
+```
+
+#### 🔁 Returns:
+
+```js
+{
+  level: 87,          // Battery percentage (0–100)
+  charging: true      // true if plugged in, false if not
+}
+```
+
+#### 📥 Output Example:
+
+```
+Battery: 62%
+Charging: No
+```
+
+---
+
+
+## 🔐 Browser Support
+
+| Browser | Supported? | Notes                              |
+| ------- | ---------- | ---------------------------------- |
+| Chrome  | ✅          | Fully supported                    |
+| Edge    | ✅          | Fully supported                    |
+| Firefox | ❌          | Removed support in recent versions |
+| Safari  | ❌          | Not supported                      |
+| Android | ✅          | Mostly supported                   |
+
+---
