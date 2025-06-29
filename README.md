@@ -379,6 +379,89 @@ listenNetworkStatus((status) => {
 
 
 
+# 👁 Tab Visibility API – webdev-power-kit
+
+This module lets you detect when a browser tab becomes visible or hidden — great for optimizing UI behavior, saving resources, or tracking user focus.
+
+---
+
+## ✨ Features
+
+* Detect if the tab is active or hidden
+* Listen for real-time tab visibility changes
+* Use to pause/resume media, animations, or timers
+* Uses native `document.visibilityState`
+
+---
+
+## ✅ Functions
+
+### 1. `isTabVisible()`
+
+📌 Check whether the current browser tab is visible to the user.
+
+```js
+import { isTabVisible } from "webdev-power-kit";
+
+if (isTabVisible()) {
+  console.log("User is looking at this tab");
+} else {
+  console.log("Tab is in background");
+}
+```
+
+#### 🔁 Returns:
+
+* `true` → if tab is visible
+* `false` → if tab is hidden or inactive
+
+---
+
+### 2. `listenTabVisibility(callback)`
+
+📌 Listen for changes in tab visibility and execute callback accordingly.
+
+```js
+import { listenTabVisibility } from "webdev-power-kit";
+
+listenTabVisibility((visible) => {
+  console.log(visible ? "👀 Visible" : "🙈 Hidden");
+});
+```
+
+#### 📥 Parameters:
+
+| Param      | Type                         | Description                                      |
+| ---------- | ---------------------------- | ------------------------------------------------ |
+| `callback` | `(visible: boolean) => void` | Called with `true` (visible) or `false` (hidden) |
+
+#### 🔁 Returns:
+
+* A function to unsubscribe and stop listening
+
+---
+
+## 🔐 Browser Support
+
+| Browser | Supported? | Notes           |
+| ------- | ---------- | --------------- |
+| Chrome  | ✅          | Fully supported |
+| Firefox | ✅          | Fully supported |
+| Edge    | ✅          | Fully supported |
+| Safari  | ✅          | Fully supported |
+| Mobile  | ✅          | Fully supported |
+
+---
+
+## 💡 Use Cases
+
+* Pause videos or animations when tab is hidden
+* Stop background API calls while inactive
+* Detect user engagement and tab switching
+* Show “Welcome back” messages on return
+
+
+---
 
 
 

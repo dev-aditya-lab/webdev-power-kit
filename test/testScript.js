@@ -2,6 +2,12 @@ import { copyToClipboard, readClipboard } from '../src/index.js';
 import { sendNotification } from '../src/index.js';
 import { getBatteryStatus } from '../src/index.js';
 import { isOnline, listenNetworkStatus } from "../src/index.js";
+import { listenTabVisibility } from "../src/index.js";
+
+listenTabVisibility((visible) => {
+  document.getElementById("tab-status").textContent =
+    visible ? "👀 Tab is visible" : "🙈 Tab is hidden";
+});
 
 const statusText = document.getElementById("status");
 
