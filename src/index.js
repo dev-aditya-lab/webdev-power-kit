@@ -6,3 +6,4 @@ export * from './network.js';
 export * from './tabVisibility.js';
 export * from './preventClose.js';
 export * from './idleTimer.js';
+export * from './darkMode.js';

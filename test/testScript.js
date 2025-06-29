@@ -5,7 +5,12 @@ import { isOnline, listenNetworkStatus } from "../src/index.js";
 import { listenTabVisibility } from "../src/index.js";
 import { preventTabClose } from "../src/index.js";
 import { startIdleTimer } from "../src/index.js";
+import { isDarkMode, listenDarkMode } from "../src/index.js";
 
+listenDarkMode((isDark) => {
+  document.getElementById("theme-status").textContent =
+    isDark ? "🌙 Dark mode enabled" : "☀️ Light mode enabled";
+});
 startIdleTimer(5, () => {
   document.getElementById("idle").textContent = "💤 You are idle!";
 });
