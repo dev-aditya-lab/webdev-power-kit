@@ -1,6 +1,6 @@
 {
   "name": "webdev-power-kit",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "A powerful toolkit that simplifies access to browser features like clipboard, notifications, battery, vibration, and more — perfect for modern web developers.",
   "keywords": [
     "webdev",
@@ -13,7 +13,6 @@
     "frontend",
     "html5-api",
     "javascript",
-    "typescript",
     "web-utilities",
     "productivity"
   ],
@@ -26,15 +25,27 @@
     "url": "git+https://github.com/dev-aditya-lab/webdev-power-kit.git"
   },
   "license": "MIT",
-  "author": "Aditya Kumar Gupta <ad1123itya@gmail.com>",
-  "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "scripts": {
-    "build": "tsc",
-    "test": "echo \"No tests yet\""
+  "author": {
+    "name": "Aditya Kumar Gupta",
+    "email": "ad1123itya@gmail.com",
+    "url": "https://github.com/dev-aditya-lab"
   },
-  "devDependencies": {
-    "typescript": "^5.8.3"
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "start": "node ./examples/index.js",
+    "test": "echo \"No tests yet\"",
+    "build": "echo 'No build step required for pure JS'"
+  },
+  "engines": {
+    "node": ">=14"
   }
 }
