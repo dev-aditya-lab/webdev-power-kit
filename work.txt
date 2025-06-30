@@ -1,0 +1,3 @@
+npm publish --tag beta
+npm install webdev-power-kit@beta
+npm install webdev-power-kit@1.1.0-beta.0
