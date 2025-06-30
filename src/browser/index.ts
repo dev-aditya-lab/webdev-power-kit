@@ -8,3 +8,4 @@ export * from "./prevent-close";
 export * from "./network";
 export * from "./vibration";
 export * from "./geolocation";
+export * from "./screen-info";
