@@ -4,3 +4,6 @@ export * from './battery';
 export * from './dark-mode'; 
 export * from "./tab-visibility"; 
 export * from "./idle-timer"; 
+export * from "./prevent-close";
+export * from "./network";
+export * from "./vibration";
