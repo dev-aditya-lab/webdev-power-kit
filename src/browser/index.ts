@@ -9,3 +9,4 @@ export * from "./network";
 export * from "./vibration";
 export * from "./geolocation";
 export * from "./screen-info";
+export * from "./storage";
