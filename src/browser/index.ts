@@ -7,3 +7,4 @@ export * from "./idle-timer";
 export * from "./prevent-close";
 export * from "./network";
 export * from "./vibration";
+export * from "./geolocation";
