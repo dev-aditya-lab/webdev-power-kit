@@ -1,6 +1,6 @@
 {
   "name": "web-power-kit",
-  "version": "1.0.0-beta.0",
+  "version": "1.0.0-beta.1",
   "description": "A powerful toolkit that simplifies access to browser features like clipboard, notifications, battery, vibration, and more — perfect for modern web developers.",
   "keywords": [
     "webdev",
