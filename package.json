@@ -1,6 +1,6 @@
 {
   "name": "webdev-power-kit",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "description": "A powerful toolkit that simplifies access to browser features like clipboard, notifications, battery, vibration, and more — perfect for modern web developers.",
   "keywords": ["webdev","browser-api","clipboard","battery","notification","vibration","developer-tools","frontend", "html5-api","javascript","typescript","web-utilities","productivity"],
   "homepage": "https://github.com/dev-aditya-lab/webdev-power-kit#readme",

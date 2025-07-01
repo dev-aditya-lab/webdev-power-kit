@@ -3,7 +3,7 @@
   
 </p>
 
-<h1 align="center">🚀 WebDev Power Kit</h1>
+<!-- <h1 align="center">🚀 WebDev Power Kit</h1> -->
 
 <p align="center">
   A powerful, modular toolkit that simplifies working with browser APIs, utility tools, and system-level features — built for modern web developers. ⚡
