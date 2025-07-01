@@ -1,31 +1,39 @@
-name: 🚀 Feature Request
+name: "\ud83d\ude80 Feature Request"
 description: Suggest a new feature for webdev-power-kit
 title: "[Feature] "
 labels: ["enhancement"]
 body:
+  - type: markdown
+    attributes:
+      value: |
+        💡 Thanks for contributing! Please describe your requested feature below.
+
   - type: textarea
     id: description
     attributes:
       label: Feature Description
-      placeholder: What would you like to see added?
+      description: What would you like to see added? Be specific and clear.
+      placeholder: e.g. A function that returns the current screen orientation.
     validations:
       required: true
 
-  - type: input
+  - type: textarea
     id: use-case
     attributes:
       label: Why do you need this feature?
-      placeholder: Example: I want to detect screen rotation.
+      description: What’s your use case or what problem would this feature solve?
+      placeholder: e.g. I want to change layout when screen rotates on mobile.
     validations:
       required: true
 
   - type: checkboxes
-    id: context
+    id: category
     attributes:
-      label: Feature Category
+      label: Related Category
+      description: Which category does this feature belong to?
       options:
-        - label: Browser API
-        - label: Utility Tool
-        - label: Performance Helper
-        - label: Device Info
-        - label: Other
+        - label: "\ud83d\udcc6 Browser API"
+        - label: "\ud83d\udee0\ufe0f Utility Tool"
+        - label: "\ud83d\udcca Performance"
+        - label: "\ud83d\udcf1 Device Info"
+        - label: "\ud83d\udd0d Other / Not Sure"
