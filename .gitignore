@@ -1,3 +1,6 @@
+work.txt
+cnddocs.md
+
 # Node modules (don’t push 1000s of files)
 node_modules/
 
