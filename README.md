@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./webdev logo long.png" width="500" alt="WebDev Power Kit Logo" />
+  <img src="https://raw.githubusercontent.com/dev-aditya-lab/webdev-power-kit/refs/heads/main/webdev%20logo%20long.png" width="500" alt="WebDev Power Kit Logo" />
   
 </p>
 
