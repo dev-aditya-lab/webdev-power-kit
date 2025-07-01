@@ -37,3 +37,5 @@ body:
         - label: 📊 Performance
         - label: 📱 Device Info
         - label: 🔍 Other / Not Sure
+    validations:
+      required: true
