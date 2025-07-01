@@ -1,4 +1,4 @@
-name: "\ud83d\ude80 Feature Request"
+name: "🚀 Feature Request"
 description: Suggest a new feature for webdev-power-kit
 title: "[Feature] "
 labels: ["enhancement"]
@@ -32,8 +32,8 @@ body:
       label: Related Category
       description: Which category does this feature belong to?
       options:
-        - label: "\ud83d\udcc6 Browser API"
-        - label: "\ud83d\udee0\ufe0f Utility Tool"
-        - label: "\ud83d\udcca Performance"
-        - label: "\ud83d\udcf1 Device Info"
-        - label: "\ud83d\udd0d Other / Not Sure"
+        - label: 📦 Browser API
+        - label: 🛠 Utility Tool
+        - label: 📊 Performance
+        - label: 📱 Device Info
+        - label: 🔍 Other / Not Sure
