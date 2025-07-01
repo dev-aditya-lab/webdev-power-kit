@@ -44,7 +44,7 @@ Write clean, future-ready web apps with ease using modern browser features in ju
 
 Explore detailed guides, feature docs, and examples in the docs section:
 
-👉 [View Full Documentation](https://webdev-power-kit.hashnode.dev/docs/introduction)
+👉 [View Full Documentation](https://webdev-power-kit.hashnode.space/docs/introduction)
 
 **Structure Includes:**
 
@@ -154,9 +154,9 @@ We follow a clean modular structure — every feature must:
 **Aditya Kumar Gupta**
 Computer Science Engineer • Web Developer • Hackathon Enthusiast
 
-* 🔗 [Portfolio](https://your-portfolio-link)
-* 🐙 [GitHub](https://github.com/adityakgupta)
-* 📝 [Hashnode Docs](https://webdev-power-kit.hashnode.dev/docs/introduction)
+<!-- * 🔗 [Portfolio](https://your-portfolio-link) -->
+* 🐙 [GitHub](https://github.com/dev-aditya-lab)
+* 📝 [Hashnode Docs](https://webdev-power-kit.hashnode.space/docs/introduction)
 
 ---
 
