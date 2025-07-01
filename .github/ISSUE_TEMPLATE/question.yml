@@ -1,0 +1,46 @@
+name: "💬 Question / Help"
+description: Ask a question or request support
+title: "[Question] "
+labels: ["question"]
+body:
+  - type: input
+    id: email
+    attributes:
+      label: Email
+      description: Enter Your Email for replay.
+      placeholder: Enter Your email (e.g. abc@xyz.com)
+    validations:
+      required: true
+
+  - type: input
+    id: name
+    attributes:
+      label: Name
+      description: Enter Your full name.
+      placeholder: Full name (e.g. Jhon Doh)
+    validations:
+      required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: What’s your question?
+      description: Ask anything about using this package, setup, or usage.
+      placeholder: How do I detect when tab becomes visible again?
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: tried
+    attributes:
+      label: What have you tried?
+      options:
+        - label: ✅ I’ve read the docs
+        - label: ✅ I searched issues
+        - label: ✅ I tried to debug myself
+
+  - type: input
+    id: module
+    attributes:
+      label: Related function (optional)
+      placeholder: e.g. tab-visibility / clipboard

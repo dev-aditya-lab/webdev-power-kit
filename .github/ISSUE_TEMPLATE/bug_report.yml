@@ -1,0 +1,45 @@
+name: "🐞 Bug Report"
+description: Something isn't working as expected
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Tell us what broke or didn’t work.
+      placeholder: I called copyToClipboard but it threw an error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect to happen?
+      placeholder: I expected it to copy text to the clipboard.
+    validations:
+      required: true
+
+  - type: input
+    id: feature
+    attributes:
+      label: Which function/module?
+      placeholder: e.g. copyToClipboard, isOnline, testNetworkSpeed
+
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Which browser?
+      options:
+        - Chrome
+        - Firefox
+        - Safari
+        - Edge
+        - Mobile Browser
+        - Other
+
+  - type: input
+    id: version
+    attributes:
+      label: webdev-power-kit version
+      placeholder: e.g. 1.4.2
