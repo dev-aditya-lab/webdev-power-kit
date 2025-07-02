@@ -8,7 +8,7 @@ Thank you for taking the time to help improve the security of **webdev-power-kit
 
 If you discover a security vulnerability, please report it **privately** and **responsibly** by emailing:
 
-📧 **[adityakumargupta.dev@gmail.com](mailto:ad1123itya@gmail.com)**
+📧 **[contact via mail](mailto:ad1123itya@gmail.com)**
 
 Please include:
 
