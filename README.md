@@ -152,7 +152,7 @@ We follow a clean modular structure — every feature must:
 ## 👨‍💻 Author
 
 **Aditya Kumar Gupta**
-Computer Science Engineer • Web Developer • Hackathon Enthusiast
+Computer Science Engineer • Web Developer 
 
 <!-- * 🔗 [Portfolio](https://your-portfolio-link) -->
 * 🐙 [GitHub](https://github.com/dev-aditya-lab)
