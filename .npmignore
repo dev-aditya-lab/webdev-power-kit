@@ -5,3 +5,6 @@ tsconfig.json
 node_modules/
 .vscode/
 examples/
+frontend/
+/frontend
+.github/
