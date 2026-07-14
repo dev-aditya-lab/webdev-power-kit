@@ -1,8 +1,24 @@
-# WebDev Power Kit
+<p align="center">
+  <img src="https://raw.githubusercontent.com/dev-aditya-lab/webdev-power-kit/refs/heads/main/webdev%20logo%20long.png" width="500" alt="WebDev Power Kit Logo" />
+</p>
 
-A modular, TypeScript-powered utility library designed to simplify browser API interactions, performance optimization, and common utility tasks.
+<p align="center">
+  A modular, TypeScript-powered utility library designed to simplify browser API interactions, performance optimization, and common utility tasks.
+</p>
 
-[Website and Documentation](https://webdev-power-kit.hashnode.space/docs/introduction) | [GitHub Repository](https://github.com/dev-aditya-lab/webdev-power-kit) | [npm Package](https://www.npmjs.com/package/webdev-power-kit)
+<p align="center">
+  <a href="https://www.npmjs.com/package/webdev-power-kit"><img src="https://img.shields.io/npm/v/webdev-power-kit?color=blue&label=npm%20version" alt="npm version" /></a>
+  <a href="https://www.npmjs.com/package/webdev-power-kit"><img src="https://img.shields.io/npm/dt/webdev-power-kit?color=green&label=downloads" alt="downloads" /></a>
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT" /></a>
+  <a href="https://webdev-power-kit.hashnode.space/docs/introduction"><img src="https://img.shields.io/badge/docs-read-0984e3?logo=hashnode" alt="docs" /></a>
+  <a href="https://github.com/dev-aditya-lab"><img src="https://img.shields.io/badge/made%20by-Aditya%20Kumar%20Gupta-blueviolet" alt="Made by Aditya" /></a>
+</p>
+
+<p align="center">
+  <a href="https://webdev-power-kit.hashnode.space/docs/introduction">Website &amp; Documentation</a> • 
+  <a href="https://github.com/dev-aditya-lab/webdev-power-kit">GitHub Repository</a> • 
+  <a href="https://www.npmjs.com/package/webdev-power-kit">npm Package</a>
+</p>
 
 ---
 
