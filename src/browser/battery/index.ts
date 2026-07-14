@@ -8,9 +8,7 @@ interface BatteryManager extends EventTarget {
     listener: (this: BatteryManager, ev: Event) => any,
     options?: boolean | AddEventListenerOptions
   ): void;
-}
-
-/**
+}/**
  * Returns the battery status using the Navigator API.
  * @returns Promise that resolves to a BatteryManager object
  */
