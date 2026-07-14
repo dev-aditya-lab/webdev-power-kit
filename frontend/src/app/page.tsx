@@ -1,172 +1,20 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { CodeBlock } from "@/components/CodeBlock";
+import {
+  Callout,
+  ParamTable,
+  BrowserSupport as BrowserSupportBase,
+} from "@/components/DocComponents";
+import { Sidebar } from "@/components/Sidebar";
+import { Header } from "@/components/Header";
+import { Landing } from "@/components/Landing";
+import { ALL_NAV_ITEMS } from "@/lib/nav";
 
 // ─────────────────────────────────────────────
-//  Data: Sidebar Navigation
-// ─────────────────────────────────────────────
-const NAV = [
-  {
-    section: "Getting Started",
-    links: [
-      { id: "introduction", label: "Introduction", icon: "🚀" },
-      { id: "installation", label: "Installation", icon: "📦" },
-      { id: "quick-start", label: "Quick Start", icon: "⚡" },
-      { id: "typescript", label: "TypeScript Support", icon: "🔷" },
-    ],
-  },
-  {
-    section: "Browser APIs",
-    links: [
-      { id: "clipboard", label: "Clipboard", icon: "📋" },
-      { id: "battery", label: "Battery", icon: "🔋" },
-      { id: "notifications", label: "Notifications", icon: "🔔" },
-      { id: "dark-mode", label: "Dark Mode", icon: "🌙" },
-      { id: "geolocation", label: "Geolocation", icon: "📍" },
-      { id: "network", label: "Network", icon: "🌐" },
-      { id: "screen-info", label: "Screen Info", icon: "🖥️" },
-      { id: "storage", label: "Storage", icon: "💾" },
-      { id: "tab-visibility", label: "Tab Visibility", icon: "👁️" },
-      { id: "idle-timer", label: "Idle Timer", icon: "⏱️" },
-      { id: "vibration", label: "Vibration", icon: "📳" },
-      { id: "prevent-close", label: "Prevent Close", icon: "🛡️" },
-    ],
-  },
-  {
-    section: "Utilities",
-    links: [{ id: "otp", label: "OTP Generator", icon: "🔐" }],
-  },
-  {
-    section: "Performance",
-    links: [
-      { id: "debounce", label: "Debounce", icon: "⏳" },
-      { id: "throttle", label: "Throttle", icon: "🚦" },
-    ],
-  },
-  {
-    section: "More",
-    links: [
-      { id: "changelog", label: "Changelog", icon: "📝" },
-      { id: "contributing", label: "Contributing", icon: "🤝" },
-      { id: "faq", label: "FAQ", icon: "❓" },
-    ],
-  },
-];
-
-// ─────────────────────────────────────────────
-//  Copy Button Component
-// ─────────────────────────────────────────────
-function CopyButton({ text }: { text: string }) {
-  const [copied, setCopied] = useState(false);
-  const copy = async () => {
-    await navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-  return (
-    <button
-      className={`code-block-copy${copied ? " copied" : ""}`}
-      onClick={copy}
-    >
-      {copied ? "✓ Copied" : "Copy"}
-    </button>
-  );
-}
-
-// ─────────────────────────────────────────────
-//  Code Block Component
-// ─────────────────────────────────────────────
-function CodeBlock({ lang, code }: { lang: string; code: string }) {
-  return (
-    <div className="code-block" style={{ margin: "1rem 0" }}>
-      <div className="code-block-header">
-        <span className="code-block-lang">{lang}</span>
-        <CopyButton text={code} />
-      </div>
-      <pre>
-        <code dangerouslySetInnerHTML={{ __html: highlight(code, lang) }} />
-      </pre>
-    </div>
-  );
-}
-
-// Very light syntax highlighter (keyword, string, comment, type coloring)
-function highlight(code: string, lang: string): string {
-  if (lang === "bash" || lang === "sh") {
-    return code
-      .replace(/(&lt;|<)/g, "&lt;")
-      .replace(/(&gt;|>)/g, "&gt;")
-      .replace(/^(\$)\s/gm, '<span style="color:#64748b">$ </span>')
-      .replace(/(npm|yarn|pnpm|npx)/g, '<span style="color:#a78bfa">$1</span>')
-      .replace(/(install|add|i\b)/g, '<span style="color:#67e8f9">$1</span>');
-  }
-  const escaped = code
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
-
-  const colors = {
-    keyword: "#c792ea",
-    string: "#c3e88d",
-    comment: "#546e7a",
-    type: "#82aaff",
-    fn: "#82aaff",
-    param: "#f07178",
-    number: "#f78c6c",
-    bool: "#ff9cac",
-    operator: "#89ddff",
-    punct: "#89ddff",
-  };
-
-  return escaped
-    .replace(
-      /\/\/.*/g,
-      `<span style="color:${colors.comment};font-style:italic">$&</span>`
-    )
-    .replace(
-      /(".*?"|'.*?'|`[^`]*`)/g,
-      `<span style="color:${colors.string}">$1</span>`
-    )
-    .replace(
-      /\b(import|export|from|const|let|var|function|return|async|await|new|if|else|throw|typeof|interface|type|extends|implements|void|null|undefined|default|class|this|true|false)\b/g,
-      `<span style="color:${colors.keyword}">$1</span>`
-    )
-    .replace(
-      /\b(Promise|string|number|boolean|any|object|Array|void|never)\b/g,
-      `<span style="color:${colors.type}">$1</span>`
-    )
-    .replace(
-      /\b(\d+)\b/g,
-      `<span style="color:${colors.number}">$1</span>`
-    );
-}
-
-// ─────────────────────────────────────────────
-//  Callout Component
-// ─────────────────────────────────────────────
-function Callout({
-  type,
-  title,
-  children,
-}: {
-  type: "info" | "warn" | "tip" | "note";
-  title?: string;
-  children: React.ReactNode;
-}) {
-  const icons = { info: "ℹ️", warn: "⚠️", tip: "💡", note: "📌" };
-  return (
-    <div className={`callout callout-${type}`}>
-      <span className="callout-icon">{icons[type]}</span>
-      <div className="callout-content">
-        {title && <strong>{title}</strong>}
-        {children}
-      </div>
-    </div>
-  );
-}
-
-// ─────────────────────────────────────────────
-//  API Table Component
+//  Adapter: old ApiTable → new ParamTable
+//  (keeps all 22 doc sections working unchanged)
 // ─────────────────────────────────────────────
 function ApiTable({
   rows,
@@ -174,64 +22,41 @@ function ApiTable({
   rows: { param: string; type: string; required?: boolean; description: string; default?: string }[];
 }) {
   return (
-    <div style={{ overflowX: "auto", borderRadius: "var(--radius)", border: "1px solid var(--border)" }}>
-      <table className="api-table">
-        <thead>
-          <tr>
-            <th>Parameter</th>
-            <th>Type</th>
-            <th>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((r) => (
-            <tr key={r.param}>
-              <td>
-                {r.param}{" "}
-                {r.required !== false ? (
-                  <span className="required-badge">required</span>
-                ) : (
-                  <span className="optional-badge">optional</span>
-                )}
-              </td>
-              <td>{r.type}</td>
-              <td style={{ color: "var(--text-secondary)" }}>
-                {r.description}
-                {r.default && (
-                  <span style={{ display: "block", fontSize: "0.75rem", color: "var(--text-muted)", marginTop: "0.2rem" }}>
-                    Default: <span className="inline-code">{r.default}</span>
-                  </span>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <ParamTable
+      rows={rows.map((r) => ({
+        name: r.param,
+        type: r.type,
+        required: r.required,
+        description: r.description,
+        defaultValue: r.default,
+      }))}
+    />
   );
 }
 
 // ─────────────────────────────────────────────
-//  Browser Support Component
+//  Adapter: old BrowserSupport → new component
 // ─────────────────────────────────────────────
-function BrowserSupport({ items }: { items: { browser: string; icon: string; supported: boolean | "partial" }[] }) {
+function BrowserSupport({
+  items,
+}: {
+  items: { browser: string; icon: string; supported: boolean | "partial" }[];
+}) {
   return (
-    <div className="browser-support">
-      {items.map((b) => (
-        <div className="browser-item" key={b.browser}>
-          <span style={{ fontSize: "1.4rem" }}>{b.icon}</span>
-          <span className="browser-item-name">{b.browser}</span>
-          <span className="browser-item-status">
-            {b.supported === true ? "✅" : b.supported === "partial" ? "⚠️" : "❌"}
-          </span>
-        </div>
-      ))}
-    </div>
+    <BrowserSupportBase
+      items={items.map((b) => ({
+        name: b.browser,
+        status:
+          b.supported === true
+            ? ("yes" as const)
+            : b.supported === "partial"
+              ? ("partial" as const)
+              : ("no" as const),
+      }))}
+    />
   );
 }
 
-// ─────────────────────────────────────────────
-//  Section: Introduction
 // ─────────────────────────────────────────────
 function SectionIntroduction() {
   return (
@@ -2128,200 +1953,87 @@ const SECTIONS: Record<string, React.FC> = {
 };
 
 // ─────────────────────────────────────────────
+//  Prev / Next navigation
+// ─────────────────────────────────────────────
+function DocNav({ activeId, onNavigate }: { activeId: string; onNavigate: (id: string) => void }) {
+  const idx = ALL_NAV_ITEMS.findIndex((l) => l.id === activeId);
+  const prev = idx > 0 ? ALL_NAV_ITEMS[idx - 1] : null;
+  const next = idx < ALL_NAV_ITEMS.length - 1 ? ALL_NAV_ITEMS[idx + 1] : null;
+  return (
+    <div className="doc-nav">
+      {prev ? (
+        <a className="doc-nav-item" onClick={() => onNavigate(prev.id)} role="button" tabIndex={0}>
+          <span className="doc-nav-label">← Previous</span>
+          <span className="doc-nav-title">{prev.label}</span>
+        </a>
+      ) : <div />}
+      {next ? (
+        <a className="doc-nav-item right" onClick={() => onNavigate(next.id)} role="button" tabIndex={0}>
+          <span className="doc-nav-label">Next →</span>
+          <span className="doc-nav-title">{next.label}</span>
+        </a>
+      ) : <div />}
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────
 //  Main App
 // ─────────────────────────────────────────────
 export default function DocsPage() {
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const searchRef = useRef<HTMLInputElement>(null);
 
   const navigateTo = (id: string) => {
-    setActiveSection(id);
+    if (id === "__home__") {
+      setActiveSection(null);
+    } else {
+      setActiveSection(id);
+    }
     setSidebarOpen(false);
     window.scrollTo({ top: 0 });
   };
 
-  // Keyboard shortcut: Cmd+K to focus search
+  // Keyboard shortcut: Cmd+K focus search (handled by sidebar)
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
-        searchRef.current?.focus();
+        setSidebarOpen(true);
       }
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, []);
 
-  const filteredNav = searchQuery
-    ? NAV.map((s) => ({
-        ...s,
-        links: s.links.filter((l) =>
-          l.label.toLowerCase().includes(searchQuery.toLowerCase())
-        ),
-      })).filter((s) => s.links.length > 0)
-    : NAV;
-
   const ActiveSection = activeSection ? SECTIONS[activeSection] : null;
 
+  // ── Landing page (no sidebar/header) ──
+  if (!ActiveSection) {
+    return <Landing onNavigate={navigateTo} />;
+  }
+
+  // ── Docs view (sidebar + header + content) ──
   return (
-    <>
-      {/* Sidebar overlay (mobile) */}
-      <div
-        className={`sidebar-overlay${sidebarOpen ? " active" : ""}`}
-        onClick={() => setSidebarOpen(false)}
+    <div className="layout">
+      <Sidebar
+        activeId={activeSection}
+        onNavigate={navigateTo}
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
       />
-
-      {/* Sidebar */}
-      <aside className={`sidebar${sidebarOpen ? " open" : ""}`}>
-        <div className="sidebar-header">
-          <a
-            className="sidebar-logo"
-            href="#"
-            onClick={(e) => { e.preventDefault(); setActiveSection(null); setSidebarOpen(false); window.scrollTo({ top: 0 }); }}
-          >
-            <div className="sidebar-logo-icon">⚡</div>
-            <div>
-              <div className="sidebar-logo-text">WebDev Power Kit</div>
-              <div className="sidebar-logo-version">v2.1.5 docs</div>
-            </div>
-          </a>
-          {/* Search */}
-          <div style={{ marginTop: "1rem", position: "relative" }}>
-            <input
-              ref={searchRef}
-              type="text"
-              placeholder="Search docs…"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              style={{
-                width: "100%",
-                background: "var(--bg-glass)",
-                border: "1px solid var(--border)",
-                borderRadius: "var(--radius-sm)",
-                padding: "0.4rem 0.75rem 0.4rem 2rem",
-                color: "var(--text-secondary)",
-                fontSize: "0.8rem",
-                fontFamily: "var(--font-sans)",
-                outline: "none",
-              }}
-            />
-            <span style={{ position: "absolute", left: "0.6rem", top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)", fontSize: "0.8rem" }}>🔍</span>
-          </div>
+      <div className="page-content">
+        <Header
+          activeId={activeSection}
+          onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
+          sidebarOpen={sidebarOpen}
+        />
+        <div className="doc-page">
+          <ActiveSection />
+          <DocNav activeId={activeSection!} onNavigate={navigateTo} />
         </div>
-        <nav className="sidebar-nav">
-          {filteredNav.map((s) => (
-            <div key={s.section} className="sidebar-section">
-              <div className="sidebar-section-title">{s.section}</div>
-              {s.links.map((link) => (
-                <div
-                  key={link.id}
-                  className={`sidebar-link${activeSection === link.id ? " active" : ""}`}
-                  onClick={() => navigateTo(link.id)}
-                >
-                  <span className="sidebar-link-icon">{link.icon}</span>
-                  {link.label}
-                </div>
-              ))}
-            </div>
-          ))}
-        </nav>
-        {/* Sidebar Footer */}
-        <div style={{ padding: "1rem 1.5rem", borderTop: "1px solid var(--border)", marginTop: "auto" }}>
-          <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-            <a href="https://github.com/dev-aditya-lab/webdev-power-kit" target="_blank" rel="noopener" style={{ color: "var(--text-muted)", fontSize: "0.75rem", textDecoration: "none" }}>GitHub</a>
-            <span style={{ color: "var(--border)" }}>·</span>
-            <a href="https://www.npmjs.com/package/webdev-power-kit" target="_blank" rel="noopener" style={{ color: "var(--text-muted)", fontSize: "0.75rem", textDecoration: "none" }}>npm</a>
-            <span style={{ color: "var(--border)" }}>·</span>
-            <span style={{ color: "var(--text-muted)", fontSize: "0.75rem" }}>MIT</span>
-          </div>
-          <p style={{ color: "var(--text-muted)", fontSize: "0.7rem", marginTop: "0.5rem" }}>
-            Made with ❤️ by Aditya Kumar Gupta
-          </p>
-        </div>
-      </aside>
-
-      {/* Header */}
-      <header className="header">
-        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-          <button
-            className="menu-toggle"
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            aria-label="Toggle sidebar"
-          >
-            ☰
-          </button>
-          {activeSection && (
-            <nav style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.85rem" }}>
-              <span
-                style={{ color: "var(--text-muted)", cursor: "pointer" }}
-                onClick={() => { setActiveSection(null); window.scrollTo({ top: 0 }); }}
-              >
-                Docs
-              </span>
-              <span style={{ color: "var(--border)" }}>/</span>
-              <span style={{ color: "var(--text-primary)", fontWeight: 500 }}>
-                {NAV.flatMap((s) => s.links).find((l) => l.id === activeSection)?.label}
-              </span>
-            </nav>
-          )}
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-          <a
-            href="https://github.com/dev-aditya-lab/webdev-power-kit"
-            target="_blank"
-            rel="noopener"
-            className="btn btn-ghost"
-            style={{ fontSize: "0.82rem" }}
-          >
-            <span>⭐</span> GitHub
-          </a>
-          <a
-            href="https://www.npmjs.com/package/webdev-power-kit"
-            target="_blank"
-            rel="noopener"
-            className="btn btn-primary"
-            style={{ fontSize: "0.82rem", padding: "0.45rem 0.9rem" }}
-          >
-            npm
-          </a>
-        </div>
-      </header>
-
-      {/* Main content */}
-      <main className="main-content">
-        {ActiveSection ? (
-          <div className="content-page">
-            <ActiveSection />
-            {/* Prev / Next navigation */}
-            <div style={{ marginTop: "4rem", paddingTop: "2rem", borderTop: "1px solid var(--border)", display: "flex", justifyContent: "space-between", gap: "1rem", flexWrap: "wrap" }}>
-              {(() => {
-                const allLinks = NAV.flatMap((s) => s.links);
-                const idx = allLinks.findIndex((l) => l.id === activeSection);
-                const prev = idx > 0 ? allLinks[idx - 1] : null;
-                const next = idx < allLinks.length - 1 ? allLinks[idx + 1] : null;
-                return (
-                  <>
-                    {prev ? (
-                      <button className="btn btn-secondary" onClick={() => navigateTo(prev.id)}>
-                        ← {prev.label}
-                      </button>
-                    ) : <div />}
-                    {next ? (
-                      <button className="btn btn-secondary" onClick={() => navigateTo(next.id)}>
-                        {next.label} →
-                      </button>
-                    ) : <div />}
-                  </>
-                );
-              })()}
-            </div>
-          </div>
-        ) : (
-          <HeroPage onNavigate={navigateTo} />
-        )}
-      </main>
-    </>
+      </div>
+    </div>
   );
 }
+

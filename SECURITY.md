@@ -1,63 +1,44 @@
-# 🔐 Security Policy and Procedures
+# Security Policy
 
-Thank you for taking the time to help improve the security of **webdev-power-kit**. We take all reports of potential vulnerabilities seriously and are committed to keeping this toolkit safe and trustworthy for developers.
-
----
-
-## 📬 Reporting a Vulnerability
-
-If you discover a security vulnerability, please report it **privately** and **responsibly** by emailing:
-
-📧 **[contact via mail](mailto:ad1123itya@gmail.com)**
-
-Please include:
-
-* A clear description of the issue
-* Steps to reproduce it (if applicable)
-* Any potential impact it might cause
-
-We will acknowledge your report within **2 business days** and work on a fix promptly. Public disclosure should only occur **after** the issue has been resolved and released.
+We are committed to maintaining the security and integrity of WebDev Power Kit. We take all reports of potential vulnerabilities seriously and work to resolve them as quickly as possible.
 
 ---
 
-## 🔒 Scope
+## Reporting a Vulnerability
 
-This project interacts with several browser APIs and user-facing behaviors. Security concerns may include (but are not limited to):
+If you identify a security vulnerability in this project, please report it privately to the maintainers to protect downstream users. Do not disclose vulnerabilities in public GitHub issues.
 
-* Abuse of clipboard or geolocation APIs
-* Insecure handling of data in local/session storage
-* Incorrect permission checks for browser APIs
-* Exposure of sensitive information
-* Denial-of-service (DoS) vulnerabilities
+To report an issue:
+* Contact the maintainer directly via email: **[contact maintainer](mailto:ad1123itya@gmail.com)**
+* Provide a detailed summary of the vulnerability, including step-by-step instructions to reproduce the issue.
+* Describe any potential impact or exploit scenarios.
 
----
-
-## ✅ Responsible Disclosure
-
-We follow responsible disclosure practices and encourage researchers to:
-
-* Avoid intentionally harming user data or devices
-* Avoid accessing unnecessary or excessive data
-* Never publicly disclose without coordination
-
-All valid reports are appreciated and your efforts may be credited in release notes or the acknowledgments section.
+We will acknowledge receipt of your report within two business days and provide updates as the issue is investigated and patched.
 
 ---
 
-## 🔐 Safe by Design
+## Vulnerability Scope
 
-We build with security in mind:
-
-* No 3rd-party tracking or analytics libraries
-* All utilities follow the principle of least privilege
-* Only access browser APIs when explicitly called
-* Secure-by-default with proper error handling
+Since this library acts as a wrapper for standard browser capabilities, areas of security review include:
+* Potential cross-site scripting (XSS) risks inside text clipboard wrappers.
+* Storage API overrides or leaks of local storage variables.
+* Incorrect permission handling inside APIs like Geolocation or Notifications.
+* Unexpected denial-of-service behaviors due to memory leaks in listeners.
 
 ---
 
-## 🙏 Thank You
+## Safe-by-Design Principles
 
-We appreciate your contribution to making **webdev-power-kit** a secure and developer-friendly package.
+WebDev Power Kit is built to be secure by default:
+* **No Telemetry**: No third-party tracking, analytics, or external script inclusions.
+* **Principle of Least Privilege**: Utilities only access browser capabilities when explicitly invoked by the developer.
+* **Input Validation**: Critical parameters undergo validation before execution.
 
-For general issues or feature suggestions, please use GitHub Issues:
-👉 [https://github.com/dev-aditya-lab/webdev-power-kit/issues](https://github.com/dev-aditya-lab/webdev-power-kit/issues)
+---
+
+## general feedback
+
+For non-security bugs or standard inquiries, please submit a standard GitHub Issue:
+* [GitHub Issues Hub](https://github.com/dev-aditya-lab/webdev-power-kit/issues)
+
+Thank you for helping keep WebDev Power Kit secure.

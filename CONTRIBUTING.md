@@ -1,110 +1,65 @@
-# Contributing to webdev-power-kit
+# Contributing to WebDev Power Kit
 
-Thanks for considering contributing!
-
-## Ways to help:
-- Fix bugs
-- Suggest improvements
-- Add more browser APIs
-- Improve docs
-
-## Steps:
-1. Fork the repo
-2. Create a new branch
-3. Make your changes
-4. Submit a Pull Request
-
-# 🤝 Contribute to WebDev Power Kit
-
-Welcome to the official contribution guide for **WebDev Power Kit** — a modular, TypeScript-powered toolkit for modern web developers. Whether you’re a beginner or an experienced dev, we’d love your input. 💡
+Thank you for choosing to contribute to WebDev Power Kit. This document outlines the guidelines and workflows for submitting bug reports, feature requests, and code contributions.
 
 ---
 
-## 🧠 Why Contribute?
+## Code of Conduct
 
-WebDev Power Kit helps simplify common browser tasks and utility features. By contributing:
-
-* You help build a stronger dev toolkit for everyone 🔧
-* You get your name featured in a fast-growing OSS project 🏆
-* You gain open-source experience for your resume 💼
+By participating in this project, you agree to maintain a professional and respectful environment. Please treat all contributors and maintainers with courtesy and respect.
 
 ---
 
-## 🚀 Available Contribution Options
+## How to Contribute
 
-You can contribute in multiple ways:
+### 1. Reporting Bugs
 
-| Type                         | Description                               |
-| ---------------------------- | ----------------------------------------- |
-| 🐞 Bug Report                | Found something broken? Report it here    |
-| 🚀 Feature Request           | Suggest a new browser/utility feature     |
-| 💬 Question / Help           | Ask about usage, setup, or best practices |
-| 🧰 Custom Utility Suggestion | Recommend a reusable utility function     |
+If you encounter unexpected behavior or errors:
+* Check the existing issues database to ensure the bug has not already been reported.
+* Create a new issue describing the clear step-by-step instructions to reproduce the problem.
+* Include details about the environment (e.g., browser name, browser version, and OS).
 
----
+Use the official [Bug Report Template](https://github.com/dev-aditya-lab/webdev-power-kit/issues/new?template=bug_report.yml) to submit your report.
 
-## 📝 Templates for Issues
+### 2. Requesting Features
 
-We’ve created pre-filled GitHub issue templates so it’s super easy to contribute:
+To suggest new browser wrappers, performance optimizations, or general utility features:
+* Provide a clear description of the proposed feature and why it would be beneficial to the developer community.
+* Outline the expected API signature and input/output parameters.
 
-### 🚀 Feature Request
+Use the official [Feature Request Template](https://github.com/dev-aditya-lab/webdev-power-kit/issues/new?template=feature_request.yml) to submit your request.
 
-Suggest a new feature with:
+### 3. General Inquiries or Support
 
-* What it should do
-* Why it’s useful
-* What category it belongs to
-
-📩 [Submit Feature Request](https://github.com/dev-aditya-lab/webdev-power-kit/issues/new?template=feature_request.yml)
+If you have questions regarding setup, integration, or best practices, please use the [Q&A template](https://github.com/dev-aditya-lab/webdev-power-kit/issues/new?template=question.yml) to ask a question.
 
 ---
 
-### 🐞 Bug Report
+## Code Contribution Workflow
 
-If something isn't working:
+To propose code modifications or add new features, please follow this development workflow:
 
-* Describe what happened
-* Share what you expected
-* Mention browser/version/module
-
-📩 [Report a Bug](https://github.com/dev-aditya-lab/webdev-power-kit/issues/new?template=bug_report.yml)
-
----
-
-### 💬 Ask a Question
-
-Need help understanding a feature or usage?
-
-* Ask your question
-* Mention what you’ve already tried
-
-📩 [Ask a Question](https://github.com/dev-aditya-lab/webdev-power-kit/issues/new?template=question.yml)
-
+1. **Fork and Clone**: Fork the repository on GitHub and clone your fork locally.
+2. **Branch**: Create a new topic branch from the main branch (e.g., `feature/clipboard-enhancements` or `bugfix/battery-listener`).
+3. **Develop**: Implement your modifications. Ensure all code complies with the project's standards.
+4. **Test**: Run verification steps locally to ensure no compilation or runtime errors are introduced.
+5. **Pull Request**: Push your branch to your fork and submit a Pull Request (PR) to the main repository.
 
 ---
 
-## 🛠 Tips for Developers
+## Development Standards
 
-If you're planning to contribute code:
+To maintain consistency and code quality, all contributions must adhere to the following standards:
 
-* Follow the **modular structure**: each feature in its own folder with `index.ts`
-* Use **TypeScript** and include **error handling**
-* Add **JSDoc comments**
-* Keep it framework-agnostic (React examples only in docs)
-
-📦 All exported files should go through `/src/` and use clear file names.
+* **Modular Structure**: Each wrapper or utility must reside in its own subdirectory with an `index.ts` containing typed exports.
+* **TypeScript Integrity**: Write fully typed code. Avoid the use of `any` types where possible, and provide complete JSDoc annotations for all public interfaces.
+* **Robust Error Handling**: Handle API omissions gracefully. Implement fallbacks or throw meaningful, typed errors when browser capabilities are unsupported.
+* **Framework Agnostic**: The core library code must be framework-agnostic. Component-specific examples (e.g., React hooks or wrappers) belong solely within the documentation folders.
 
 ---
 
-## 🙌 Thank You!
+## Questions or Private Collaborations
 
-Every suggestion, report, or idea helps make WebDev Power Kit better for everyone.
-Let’s build a toolkit devs love to use. ❤️
+For private requests, security-sensitive disclosures, or collaborative opportunities, please reach out via the [GitHub Discussions Board](https://github.com/dev-aditya-lab/webdev-power-kit/discussions) or refer to the [Security Policy](SECURITY.md).
 
-> 💬 For any private requests or collaboration, feel free to reach out on  [GitHub Discussions](https://github.com/dev-aditya-lab/webdev-power-kit/discussions)
-
-📢 **Star the repo** if you like it → [GitHub Repo](https://github.com/dev-aditya-lab/webdev-power-kit)
-
----
-
-Made with 💻 by Aditya Kumar Gupta
+Thank you for helping to improve WebDev Power Kit.
