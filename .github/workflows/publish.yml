@@ -44,3 +44,28 @@ jobs:
 
       - run: npm publish
         if: steps.check.outputs.publish == 'true'
+
+  publish-gpr:
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@dev-aditya-lab'
+
+      - run: npm ci
+      - run: npm run build --if-present
+
+      - name: Set scoped name for GitHub Packages
+        run: npm pkg set name="@dev-aditya-lab/webdev-power-kit"
+
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
