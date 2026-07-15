@@ -1,9 +1,9 @@
 {
   "name": "webdev-power-kit",
-  "version": "2.1.5",
+  "version": "2.0.0",
   "description": "A powerful toolkit that simplifies access to browser features like clipboard, notifications, battery, vibration, and more — perfect for modern web developers.",
-  "keywords": ["webdev","browser-api","clipboard","battery","notification","vibration","developer-tools","frontend", "html5-api","javascript","typescript","web-utilities","productivity"],
-  "homepage": "https://webdev-power-kit.hashnode.space/docs/introduction",
+  "keywords": ["webdev","browser-api","clipboard","battery","notification","vibration","developer-tools","frontend","html5-api","javascript","typescript","web-utilities","productivity"],
+  "homepage": "https://webdev-power-kit.devaditya.dev",
   "bugs": {
     "url": "https://github.com/dev-aditya-lab/webdev-power-kit/issues"
   },
@@ -14,28 +14,31 @@
   "license": "MIT",
   "author": {
     "name": "Aditya Kumar Gupta",
-    "email": "ad1123itya@gmail.com",
-    "url": "https://github.com/dev-aditya-lab"
+    "email": "hello@devaditya.dev",
+    "url": "https://devaditya.dev"
   },
   "type": "module",
-  "main": "./dist/index.js",                
-  "types": "./dist/index.d.ts",             
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",         
-      "types": "./dist/index.d.ts"
-    }
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
   },
-  "files": [
-    "dist",                                 
-    "README.md",
-    "LICENSE"
-  ],
+  "files": ["dist"],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "scripts": {
-    "build": "tsc"                          
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
   },
   "engines": {
-    "node": ">=14"
+    "node": ">=18"
   },
   "devDependencies": {
     "typescript": "^5.8.3"

@@ -1,26 +1,30 @@
 name: Publish Package
 
 on:
-  push:
-    tags:
-      - 'v*'
+  release:
+    types: [published]   # 'created' fires for drafts too; 'published' is safer
 
 permissions:
-  id-token: write  # Required for OIDC
+  id-token: write        # Required for OIDC
   contents: read
 
 jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v4
         with:
-          node-version: '24'
+          node-version: '20'
           registry-url: 'https://registry.npmjs.org'
-          package-manager-cache: false  # never use caching in release builds
+          package-manager-cache: false
+
+      - name: Upgrade npm for OIDC support
+        run: |
+          npm install -g npm@latest
+          npm --version   # must be >= 11.5.1
+
       - run: npm ci
       - run: npm run build --if-present
-      - run: npm test
-      - run: npm publish  # Or: npm stage publish
+      - run: npm publish
