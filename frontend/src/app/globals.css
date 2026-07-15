@@ -3232,3 +3232,80 @@ a.nav-item.active .nav-item-icon { opacity: 1; color: var(--text-1); }
 [data-theme="light"] .inline-code {
   background: rgba(0,0,0,0.05);
 }
+
+/* ── Light Mode High-Contrast Overrides ──────── */
+[data-theme="light"] .callout-info {
+  background: rgba(30, 64, 175, 0.05);
+  border-color: rgba(30, 64, 175, 0.2);
+  color: #1e40af;
+}
+
+[data-theme="light"] .callout-warn {
+  background: rgba(154, 52, 18, 0.05);
+  border-color: rgba(154, 52, 18, 0.2);
+  color: #9a3412;
+}
+
+[data-theme="light"] .callout-tip {
+  background: rgba(22, 101, 52, 0.05);
+  border-color: rgba(22, 101, 52, 0.2);
+  color: #166534;
+}
+
+[data-theme="light"] .callout-note {
+  background: rgba(107, 33, 168, 0.05);
+  border-color: rgba(107, 33, 168, 0.2);
+  color: #6b21a8;
+}
+
+[data-theme="light"] .fn-sig,
+[data-theme="light"] .fn-signature {
+  background: rgba(30, 64, 175, 0.04);
+  border-color: rgba(30, 64, 175, 0.15);
+  color: #1e40af;
+}
+
+[data-theme="light"] .browser-pill.yes {
+  border-color: rgba(22, 101, 52, 0.22);
+  color: #166534;
+  background: rgba(22, 101, 52, 0.04);
+}
+
+[data-theme="light"] .browser-pill.no {
+  border-color: rgba(153, 27, 27, 0.22);
+  color: #991b1b;
+  background: rgba(153, 27, 27, 0.04);
+}
+
+[data-theme="light"] .browser-pill.partial {
+  border-color: rgba(154, 52, 18, 0.22);
+  color: #9a3412;
+  background: rgba(154, 52, 18, 0.04);
+}
+
+[data-theme="light"] .param-name {
+  color: #075985;
+}
+
+[data-theme="light"] .param-type {
+  color: #5b21b6;
+}
+
+[data-theme="light"] .badge-req {
+  background: rgba(154, 52, 18, 0.08);
+  color: #9a3412;
+  border-color: rgba(154, 52, 18, 0.22);
+}
+
+[data-theme="light"] .badge-opt {
+  background: rgba(0, 0, 0, 0.05);
+  color: #555555;
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+[data-theme="light"] .ic {
+  background: rgba(0, 0, 0, 0.04);
+  color: #0a0a0a;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
