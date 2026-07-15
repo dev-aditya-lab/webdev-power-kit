@@ -3317,13 +3317,27 @@ code, pre, kbd { font-family: var(--font-mono); }
 
 /* ── Responsive adjustments for new sections ─── */
 @media (max-width: 768px) {
-  .hero-bw { padding: 7rem 1.5rem 5rem; }
-  .hero-bw-h1 { font-size: 3rem; }
-  .hero-bw-stats { gap: 1.5rem; }
+  .hs { padding: 5rem 1.5rem 4rem; }
+  .hs-h1 { font-size: 2.6rem; }
 
   .horiz-scroll-header { padding: 4rem 1.5rem 1.5rem; }
-  .horiz-scroll-track { padding: 1.5rem 1.5rem 3rem; }
-  .hs-card { flex: 0 0 240px; min-height: 220px; padding: 1.5rem; }
+  .horiz-scroll-overflow {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 1.5rem;
+  }
+  .horiz-scroll-track {
+    padding: 1.5rem 1.5rem 3rem !important;
+    transform: none !important;
+    will-change: auto !important;
+  }
+  .hs-card {
+    flex: 0 0 240px;
+    min-height: 220px;
+    padding: 1.5rem;
+    scroll-snap-align: start;
+  }
 
   .svg-path-section { padding: 5rem 1.5rem; }
   .svg-path-diagram { height: 140px; }

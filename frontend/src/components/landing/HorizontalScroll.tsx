@@ -113,18 +113,27 @@ export function HorizontalScroll({ onNavigate }: HorizontalScrollProps) {
     const getScrollAmount = () => -(track.scrollWidth - window.innerWidth);
 
     const ctx = gsap.context(() => {
-      gsap.to(track, {
-        x: () => getScrollAmount(),
-        ease: "none",
-        scrollTrigger: {
-          trigger: section,
-          start: "top top",
-          end: () => `+=${track.scrollWidth}`,
-          scrub: 1.2,
-          pin: true,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-        },
+      const mm = gsap.matchMedia();
+
+      mm.add("(min-width: 769px)", () => {
+        gsap.to(track, {
+          x: () => getScrollAmount(),
+          ease: "none",
+          scrollTrigger: {
+            trigger: section,
+            start: "top top",
+            end: () => `+=${track.scrollWidth - window.innerWidth}`,
+            scrub: 1.2,
+            pin: true,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+          },
+        });
+      });
+
+      mm.add("(max-width: 768px)", () => {
+        // Reset x transformation on mobile devices so CSS takes over
+        gsap.set(track, { x: 0 });
       });
     }, section);
 
