@@ -1,343 +1,573 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, Copy, Check, Terminal } from "lucide-react";
+import {
+  Flame,
+  ArrowRight,
+  DollarSign,
+  Star,
+  StarHalf,
+  TrendingUp,
+  Headphones,
+  Bell,
+  RefreshCw,
+  Clipboard,
+  FileText,
+  Search,
+  Building,
+  Check,
+  MessageSquare,
+  Mail,
+  Calendar,
+  User,
+  AlertTriangle,
+  Pencil,
+  Database,
+  Code,
+  ShieldCheck,
+  HardDrive,
+  BarChart,
+  Key,
+  ListCollapse,
+  Globe,
+  Loader2,
+  Cpu,
+  Settings,
+  MoreVertical,
+  Clock3,
+  PlayCircle,
+  CheckCircle2,
+} from "lucide-react";
 import gsap from "gsap";
-import { fetchGitHubProfile } from "@/lib/github";
 
-// ── GitHub icon ─────────────────────────────
-function GithubIcon({ size = 16 }: { size?: number }) {
+/* ── Types ─────────────────────────────────────── */
+type FlowTab = "lead" | "meeting" | "follow" | "sync" | "reporting" | "drafting";
+
+interface FlowDetail {
+  text: string;
+  icon: React.ComponentType<{ size?: number; className?: string }>;
+  iconColor?: string;
+}
+
+interface FlowNodeData {
+  title: string;
+  time: string;
+  desc: string;
+  details?: (string | FlowDetail)[];
+  icon: React.ComponentType<{ size?: number; className?: string }>;
+  extra?: React.ReactNode;
+  modelChip?: string;
+}
+
+interface FlowData {
+  input: FlowNodeData;
+  action: FlowNodeData;
+  output: FlowNodeData;
+}
+
+/* ── Diagram content (high fidelity AI Agent workflows) ── */
+const DIAGRAMS: Record<FlowTab, FlowData> = {
+  lead: {
+    input: {
+      title: "New Lead Webhook",
+      time: "0.0 sec",
+      desc: "Triggers automatically on user submission form.",
+      icon: TrendingUp,
+    },
+    action: {
+      title: "Lead Enrichment",
+      time: "4.2 sec",
+      desc: "Analyze lead profiles against target company parameters.",
+      details: [
+        { text: "Clearbit API lookup", icon: Search, iconColor: "#2563eb" },
+        { text: "HubSpot data matching", icon: Building, iconColor: "#ea580c" },
+      ],
+      extra: (
+        <div className="hs-loader-pill">
+          <span>CRM validation...</span>
+          <Loader2 size={13} className="hs-loader-spinner" />
+        </div>
+      ),
+      icon: Cpu,
+      modelChip: "GPT-4-1 Mini",
+    },
+    output: {
+      title: "Enriched Record",
+      time: "0.8 sec",
+      desc: "Profile updated and assigned to representative.",
+      details: [
+        { text: "Salesforce updated", icon: Check, iconColor: "#16a34a" },
+        { text: "Slack alert dispatched", icon: MessageSquare, iconColor: "#36c5f0" },
+      ],
+      icon: CheckCircle2,
+    },
+  },
+  meeting: {
+    input: {
+      title: "Calendar Check",
+      time: "0.0 sec",
+      desc: "Detects upcoming meetings 15 minutes prior.",
+      icon: Calendar,
+    },
+    action: {
+      title: "Briefing Research",
+      time: "12 sec",
+      desc: "Retrieves context for all meeting attendees.",
+      details: [
+        { text: "LinkedIn profile lookup", icon: User, iconColor: "#0077b5" },
+        { text: "Gmail thread history digest", icon: Mail, iconColor: "#ea4335" },
+      ],
+      extra: (
+        <div className="hs-loader-pill">
+          <span>Generating briefing note...</span>
+          <Loader2 size={13} className="hs-loader-spinner" />
+        </div>
+      ),
+      icon: Cpu,
+      modelChip: "Claude 3.5 Sonnet",
+    },
+    output: {
+      title: "Brief Prepared",
+      time: "1.5 sec",
+      desc: "Talking points compiled and uploaded.",
+      details: [
+        { text: "Notion brief uploaded", icon: FileText, iconColor: "#111" },
+        { text: "Email summary dispatched", icon: Mail, iconColor: "#ea4335" },
+      ],
+      icon: CheckCircle2,
+    },
+  },
+  follow: {
+    input: {
+      title: "Email Ingestion",
+      time: "0.0 sec",
+      desc: "Listens for customer support and sales emails.",
+      icon: Mail,
+    },
+    action: {
+      title: "Intent Classifier",
+      time: "2.1 sec",
+      desc: "Categorizes email intent and sentiment scores.",
+      details: [
+        { text: "Urgency evaluation", icon: AlertTriangle, iconColor: "#ea580c" },
+        { text: "Draft reply generation", icon: Pencil, iconColor: "#2563eb" },
+      ],
+      icon: Cpu,
+      modelChip: "GPT-4-1 Mini",
+    },
+    output: {
+      title: "Auto-Draft Ready",
+      time: "0.4 sec",
+      desc: "Pre-written response queued for review.",
+      details: [
+        { text: "Gmail draft saved", icon: Mail, iconColor: "#ea4335" },
+        { text: "Assigned alert in Slack", icon: MessageSquare, iconColor: "#36c5f0" },
+      ],
+      icon: CheckCircle2,
+    },
+  },
+  sync: {
+    input: {
+      title: "Database Trigger",
+      time: "0.0 sec",
+      desc: "Detects new record insertions in PostgreSQL.",
+      icon: Database,
+    },
+    action: {
+      title: "Schema Transformer",
+      time: "0.9 sec",
+      desc: "Validates, maps, and normalizes columns.",
+      details: [
+        { text: "Type validation checks", icon: Code, iconColor: "#2563eb" },
+        { text: "PII scrubbing & hash key", icon: ShieldCheck, iconColor: "#16a34a" },
+      ],
+      extra: (
+        <div className="hs-loader-pill">
+          <span>Encrypting payload...</span>
+          <Loader2 size={13} className="hs-loader-spinner" />
+        </div>
+      ),
+      icon: Cpu,
+      modelChip: "Llama 3.1 70B",
+    },
+    output: {
+      title: "Databases Synced",
+      time: "0.2 sec",
+      desc: "Target warehouses successfully updated.",
+      details: [
+        { text: "RDS PostgreSQL upsert", icon: HardDrive, iconColor: "#2563eb" },
+        { text: "BigQuery sync ingestion", icon: BarChart, iconColor: "#ea4335" },
+      ],
+      icon: CheckCircle2,
+    },
+  },
+  reporting: {
+    input: {
+      title: "Scheduled Trigger",
+      time: "0.0 sec",
+      desc: "The agent activates the report workflow.",
+      icon: Clock3,
+    },
+    action: {
+      title: "Data Aggregation",
+      time: "18 sec",
+      desc: "Collecting metrics and compiling report fields.",
+      details: [
+        { text: "Collecting metrics", icon: FileText, iconColor: "#16a34a" },
+        { text: "Analyzing data", icon: TrendingUp, iconColor: "#2563eb" },
+      ],
+      extra: (
+        <div className="hs-loader-pill">
+          <span>Insight generation...</span>
+          <Loader2 size={13} className="hs-loader-spinner" />
+        </div>
+      ),
+      icon: Cpu,
+      modelChip: "GPT-4-1 Mini",
+    },
+    output: {
+      title: "Report Formatted",
+      time: "1.1 sec",
+      desc: "Automated weekly or monthly performance reports.",
+      details: [
+        { text: "Report posted", icon: Mail, iconColor: "#ea4335" },
+        { text: "Report posted", icon: MessageSquare, iconColor: "#36c5f0" },
+      ],
+      icon: CheckCircle2,
+    },
+  },
+  drafting: {
+    input: {
+      title: "Topic Submission",
+      time: "0.0 sec",
+      desc: "Slack command triggers article draft request.",
+      icon: MessageSquare,
+    },
+    action: {
+      title: "SEO & Copy Writing",
+      time: "24 sec",
+      desc: "Researches context and drafts content structure.",
+      details: [
+        { text: "Keyword analysis", icon: Key, iconColor: "#ea580c" },
+        { text: "Outline structure draft", icon: ListCollapse, iconColor: "#2563eb" },
+      ],
+      extra: (
+        <div className="hs-loader-pill">
+          <span>Drafting 800-word post...</span>
+          <Loader2 size={13} className="hs-loader-spinner" />
+        </div>
+      ),
+      icon: Cpu,
+      modelChip: "Claude 3.5 Sonnet",
+    },
+    output: {
+      title: "Ready to Publish",
+      time: "1.8 sec",
+      desc: "CMS draft and corresponding social copy ready.",
+      details: [
+        { text: "Ghost CMS draft saved", icon: Globe, iconColor: "#ea580c" },
+        { text: "X/Twitter posts drafted", icon: MessageSquare, iconColor: "#111" },
+      ],
+      icon: CheckCircle2,
+    },
+  },
+};
+
+const TAB_LABELS: Record<FlowTab, { label: string; icon: React.ComponentType<{ size?: number }> }> = {
+  lead: { label: "Lead Qualifier", icon: TrendingUp },
+  meeting: { label: "Meeting Prep", icon: Headphones },
+  follow: { label: "Follow-ups", icon: Bell },
+  sync: { label: "Data Sync", icon: RefreshCw },
+  reporting: { label: "Reporting", icon: Clipboard },
+  drafting: { label: "Content Drafting", icon: FileText },
+};
+
+/* ── Flow node (Input / Action / Output card) ──── */
+function FlowNode({
+  role,
+  data,
+}: {
+  role: "input" | "action" | "output";
+  data: FlowNodeData;
+}) {
+  const tag = {
+    input: { label: "Input", icon: PlayCircle, cls: "hs-tag--blue" },
+    action: { label: "Action", icon: Cpu, cls: "hs-tag--orange" },
+    output: { label: "Output", icon: CheckCircle2, cls: "hs-tag--green" },
+  }[role];
+  const TagIcon = tag.icon;
+  const Icon = data.icon;
+
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-    </svg>
+    <div className={`hs-node hs-node--${role}`}>
+      <div className={`hs-tag ${tag.cls}`}>
+        <TagIcon size={13} />
+        <span>{tag.label}</span>
+      </div>
+
+      <div className="hs-card">
+        <div className="hs-card-head">
+          <span className="hs-card-icon">
+            <Icon size={16} />
+          </span>
+          <h3 className="hs-card-title">{data.title}</h3>
+          <MoreVertical size={15} className="hs-card-kebab" />
+        </div>
+
+        <p className="hs-card-desc">{data.desc}</p>
+
+        {data.details && (
+          <ul className="hs-subcard">
+            {data.details.map((d, i) => {
+              const isObj = typeof d === "object";
+              const text = isObj ? (d as FlowDetail).text : (d as string);
+              const DetailIcon = isObj ? (d as FlowDetail).icon : null;
+              const iconColor = isObj ? (d as FlowDetail).iconColor : undefined;
+
+              return (
+                <li key={i}>
+                  {DetailIcon ? (
+                    <span className="hs-subcard-icon" style={{ color: iconColor }}>
+                      <DetailIcon size={13} />
+                    </span>
+                  ) : (
+                    <span className="hs-subdot" />
+                  )}
+                  {text}
+                </li>
+              );
+            })}
+          </ul>
+        )}
+
+        {data.extra}
+
+        <div className="hs-card-foot">
+          {data.modelChip && (
+            <span className="hs-chip-model">
+              <Settings size={11} />
+              {data.modelChip}
+            </span>
+          )}
+          <span className="hs-chip">
+            <Clock3 size={12} />
+            {data.time}
+          </span>
+        </div>
+      </div>
+    </div>
   );
 }
 
-// ── Rotating word ───────────────────────────
-const ROTATING_WORDS = ["Simplified.", "Supercharged.", "Unified.", "Effortless."];
-
-function RotatingWord() {
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    const t = setInterval(() => setIndex((i) => (i + 1) % ROTATING_WORDS.length), 2400);
-    return () => clearInterval(t);
-  }, []);
-
+/* ── Connector with animated dash + travelling pulse ── */
+function Connector() {
   return (
-    <span className="hero-rotating-word-wrap">
-      <AnimatePresence mode="wait">
-        <motion.span
-          key={index}
-          className="hero-h1-accent"
-          initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          exit={{ opacity: 0, y: -24, filter: "blur(8px)" }}
-          transition={{ duration: 0.45, ease: [0.4, 0, 0.2, 1] }}
-          style={{ display: "inline-block" }}
-        >
-          {ROTATING_WORDS[index]}
-        </motion.span>
-      </AnimatePresence>
-    </span>
+    <div className="hs-connector" aria-hidden="true">
+      <svg viewBox="0 0 100 20" fill="none" preserveAspectRatio="none">
+        <path
+          className="hs-flow-path"
+          d="M 0 10 L 93 10"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeDasharray="5 5"
+        />
+        <polygon points="92,6.5 99,10 92,13.5" fill="currentColor" />
+        <circle className="hs-flow-pulse" r="2.6" cy="10" cx="0" fill="currentColor" />
+      </svg>
+    </div>
   );
 }
 
-// ── Install command ─────────────────────────
-function InstallCommand() {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText("npm install webdev-power-kit");
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2200);
-    } catch { /* silent */ }
-  };
-
-  return (
-    <motion.button
-      className="hero-install-cmd"
-      onClick={handleCopy}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.97 }}
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.85, duration: 0.5 }}
-    >
-      <span className="hero-install-terminal"><Terminal size={13} /></span>
-      <span className="hero-install-prompt">$</span>
-      <span className="hero-install-pkg">npm install</span>
-      <span className="hero-install-name">webdev-power-kit</span>
-      <motion.span
-        className="hero-install-copy"
-        animate={copied ? { scale: [1, 1.35, 1] } : {}}
-        transition={{ duration: 0.3 }}
-      >
-        {copied ? <Check size={13} /> : <Copy size={13} />}
-      </motion.span>
-    </motion.button>
-  );
-}
-
-// ── Stat counter (GSAP count-up) ─────────────
-function StatCounter({ value, suffix = "" }: { value: number; suffix?: string }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || value === 0) return;
-    const obj = { val: 0 };
-    gsap.to(obj, {
-      val: value,
-      duration: 1.6,
-      delay: 1.2,
-      ease: "power2.out",
-      onUpdate: () => { el.textContent = Math.round(obj.val) + suffix; },
-    });
-  }, [value, suffix]);
-  return <span ref={ref}>0{suffix}</span>;
-}
-
-// ── Hero SVG bracket decoration ──────────────
-function BracketSvg() {
-  const path1Ref = useRef<SVGPathElement>(null);
-  const path2Ref = useRef<SVGPathElement>(null);
-
-  useEffect(() => {
-    const paths = [path1Ref.current, path2Ref.current].filter(Boolean) as SVGPathElement[];
-    paths.forEach((p, i) => {
-      const len = p.getTotalLength();
-      gsap.fromTo(p,
-        { strokeDasharray: len, strokeDashoffset: len },
-        { strokeDashoffset: 0, duration: 1.2, delay: 0.3 + i * 0.2, ease: "power2.inOut" }
-      );
-    });
-  }, []);
-
-  return (
-    <svg
-      className="hero-bracket-svg"
-      viewBox="0 0 120 140"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-    >
-      {/* Left bracket < */}
-      <path
-        ref={path1Ref}
-        d="M 60 10 L 10 70 L 60 130"
-        stroke="currentColor"
-        strokeWidth="3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      {/* Right bracket > */}
-      <path
-        ref={path2Ref}
-        d="M 60 10 L 110 70 L 60 130"
-        stroke="currentColor"
-        strokeWidth="3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        opacity="0.45"
-      />
-    </svg>
-  );
-}
-
-// ── Hero Background lines (GSAP) ─────────────
-function HeroBgLines() {
-  const linesRef = useRef<SVGGElement>(null);
-  useEffect(() => {
-    if (!linesRef.current) return;
-    gsap.to(linesRef.current.children, {
-      y: -30,
-      opacity: 0.04,
-      stagger: 0.4,
-      duration: 4,
-      repeat: -1,
-      yoyo: true,
-      ease: "sine.inOut",
-    });
-  }, []);
-
-  return (
-    <svg className="hero-bg-lines" aria-hidden="true" preserveAspectRatio="none" viewBox="0 0 1440 900">
-      <g ref={linesRef} stroke="currentColor" strokeWidth="1" opacity="0.06">
-        {Array.from({ length: 14 }, (_, i) => (
-          <line key={i} x1="0" y1={60 + i * 60} x2="1440" y2={60 + i * 60} />
-        ))}
-      </g>
-    </svg>
-  );
-}
-
-// ── Hero content ─────────────────────────────
 interface HeroProps {
   onNavigate: (id: string) => void;
 }
 
 export function Hero({ onNavigate }: HeroProps) {
-  const contentRef = useRef<HTMLDivElement>(null);
-  const [ghFollowers, setGhFollowers] = useState<number | null>(null);
-  const [ghRepos, setGhRepos] = useState<number | null>(null);
+  const [activeTab, setActiveTab] = useState<FlowTab>("reporting");
+  const topRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLDivElement>(null);
+  const reduced = useRef(false);
 
-  // GSAP reveal on mount
+  /* Detect prefers-reduced-motion once */
   useEffect(() => {
-    if (!contentRef.current) return;
-    gsap.from(contentRef.current.children, {
-      opacity: 0,
-      y: 32,
-      stagger: 0.08,
-      duration: 0.7,
-      delay: 0.1,
-      ease: "power3.out",
-    });
+    reduced.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   }, []);
 
-  // GitHub stats
+  /* ── Act 1 · Entrance: copy cascades in ──────── */
   useEffect(() => {
-    fetchGitHubProfile().then((profile) => {
-      if (profile) {
-        setGhFollowers(profile.followers);
-        setGhRepos(profile.public_repos);
-      }
-    });
+    const el = topRef.current;
+    if (!el || reduced.current) return;
+
+    const ctx = gsap.context(() => {
+      gsap.from(".hs-reveal", {
+        opacity: 0,
+        y: 26,
+        filter: "blur(6px)",
+        stagger: 0.09,
+        duration: 0.8,
+        ease: "power3.out",
+        clearProps: "filter",
+      });
+    }, el);
+
+    return () => ctx.revert();
   }, []);
 
-  const STATS = [
-    { v: "15+", l: "APIs", isNumber: false },
-    { v: "0", l: "Dependencies", isNumber: false },
-    { v: "100%", l: "TypeScript", isNumber: false },
-    {
-      v: ghFollowers !== null ? ghFollowers : null,
-      l: "GitHub Followers",
-      isNumber: true,
-      fallback: "—",
-    },
-  ];
+  /* ── Act 2 · Diagram: build, draw, breathe ───── */
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    if (reduced.current) return;
+
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
+
+      // Nodes assemble left → right
+      tl.fromTo(
+        ".hs-node",
+        { opacity: 0, y: 24, scale: 0.98 },
+        { opacity: 1, y: 0, scale: 1, stagger: 0.14, duration: 0.55 }
+      );
+
+      // Connectors draw themselves
+      canvas.querySelectorAll<SVGPathElement>(".hs-flow-path").forEach((path, i) => {
+        const len = path.getTotalLength();
+        tl.fromTo(
+          path,
+          { strokeDasharray: len, strokeDashoffset: len },
+          { strokeDashoffset: 0, duration: 0.7, ease: "power1.inOut" },
+          0.35 + i * 0.18
+        );
+        // After the draw, settle into an endless dash crawl
+        tl.set(path, { strokeDasharray: "5 5" });
+        tl.to(
+          path,
+          { strokeDashoffset: -20, duration: 1.4, ease: "none", repeat: -1 },
+          ">"
+        );
+      });
+
+      // A data pulse travels along each connector, forever
+      canvas.querySelectorAll<SVGCircleElement>(".hs-flow-pulse").forEach((dot, i) => {
+        gsap.fromTo(
+          dot,
+          { attr: { cx: 0 }, opacity: 0 },
+          {
+            attr: { cx: 96 },
+            opacity: 1,
+            duration: 1.6,
+            delay: 1 + i * 0.8,
+            repeat: -1,
+            repeatDelay: 1.2,
+            ease: "power1.inOut",
+          }
+        );
+      });
+
+      // Ambient float — the canvas feels alive, barely
+      gsap.to(".hs-node", {
+        y: "-=5",
+        duration: 3.2,
+        ease: "sine.inOut",
+        yoyo: true,
+        repeat: -1,
+        stagger: { each: 0.5, from: "center" },
+      });
+    }, canvas);
+
+    return () => ctx.revert();
+  }, [activeTab]);
+
+  const activeData = DIAGRAMS[activeTab];
 
   return (
-    <section className="hero-bw">
-      {/* Background */}
-      <div className="hero-bw-bg" aria-hidden="true">
-        <HeroBgLines />
-        {/* Noise grain */}
-        <div className="hero-noise" />
-        {/* Subtle radial spotlight */}
-        <div className="hero-spotlight" />
-        {/* Dot grid */}
-        <svg className="hero-dot-grid" aria-hidden="true">
-          <defs>
-            <pattern id="hero-dots-bw" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
-              <circle cx="1" cy="1" r="1" fill="currentColor" opacity="0.07" />
-            </pattern>
-            <radialGradient id="hero-dot-fade" cx="50%" cy="50%" r="60%">
-              <stop offset="0%" stopColor="white" stopOpacity="1" />
-              <stop offset="100%" stopColor="white" stopOpacity="0" />
-            </radialGradient>
-            <mask id="hero-dot-mask-bw">
-              <rect width="100%" height="100%" fill="url(#hero-dot-fade)" />
-            </mask>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#hero-dots-bw)" mask="url(#hero-dot-mask-bw)" />
-        </svg>
-      </div>
-
-      {/* Content */}
-      <div ref={contentRef} className="hero-bw-inner">
-        {/* Badge */}
-        <div className="hero-bw-badge">
-          <span className="hero-badge-pulse" />
-          <span>v2.2.0 · Open Source · TypeScript-first</span>
+    <section className="hs">
+      {/* ── Hero copy ─────────────────────────── */}
+      <div ref={topRef} className="hs-top">
+        <div className="hs-badge hs-reveal">
+          <span className="hs-badge-new">
+            <Flame size={12} />
+            New
+          </span>
+          <span className="hs-badge-text">Introducing AI Agent</span>
         </div>
 
-        {/* SVG bracket decoration */}
-        <div className="hero-bracket-wrap">
-          <BracketSvg />
-        </div>
-
-        {/* Headline */}
-        <h1 className="hero-bw-h1">
-          Browser APIs,
+        <h1 className="hs-h1 hs-reveal">
+          Work with AI agent
           <br />
-          <RotatingWord />
+          that handles your daily operations
         </h1>
 
-        {/* Subline */}
-        <p className="hero-bw-sub">
-          The ultimate TypeScript toolkit for modern web developers.
-          <br />
-          Clipboard, battery, geolocation, notifications &amp; more —
-          <br />
-          <strong>zero dependencies</strong>, fully typed, one import away.
+        <p className="hs-sub hs-reveal">
+          Automate routine tasks, connect your tools, and let your AI agent coordinate
+          workflows so you can focus on strategy, not busywork.
         </p>
 
-        {/* Install command */}
-        <InstallCommand />
-
-        {/* CTA buttons */}
-        <motion.div
-          className="hero-bw-actions"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.05, duration: 0.5 }}
-        >
-          <button className="btn-bw-primary" onClick={() => onNavigate("introduction")}>
-            Get Started <ArrowRight size={16} />
+        <div className="hs-actions hs-reveal">
+          <button className="hs-btn-primary" onClick={() => onNavigate("introduction")}>
+            Get Started
+            <ArrowRight size={15} />
           </button>
-          <a
-            className="btn-bw-outline"
-            href="https://github.com/dev-aditya-lab/webdev-power-kit"
-            target="_blank"
-            rel="noopener"
-          >
-            <GithubIcon size={16} />
-            Star on GitHub
-          </a>
-        </motion.div>
+          <button className="hs-btn-outline" onClick={() => onNavigate("pricing")}>
+            <DollarSign size={15} />
+            View Pricing
+          </button>
+        </div>
 
-        {/* Quick stats */}
-        <motion.div
-          className="hero-bw-stats"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.35, duration: 0.6 }}
-        >
-          {STATS.map((s) => (
-            <div key={s.l} className="hero-bw-stat">
-              <span className="hero-bw-stat-val">
-                {s.isNumber && s.v !== null ? (
-                  <StatCounter value={s.v as number} />
-                ) : (
-                  (s as { v: string | number | null; fallback?: string; isNumber: boolean }).isNumber
-                    ? ((s as { fallback?: string }).fallback ?? "—")
-                    : String(s.v)
-                )}
-              </span>
-              <span className="hero-bw-stat-label">{s.l}</span>
-            </div>
-          ))}
-        </motion.div>
+        <div className="hs-proof hs-reveal">
+          <div className="hs-avatars">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&h=100&q=80" alt="Avatar 1" />
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&h=100&q=80" alt="Avatar 2" />
+            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&h=100&q=80" alt="Avatar 3" />
+            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&h=100&q=80" alt="Avatar 4" />
+          </div>
+          <span className="hs-proof-text">
+            <strong>12K+</strong> Users
+          </span>
+          <span className="hs-proof-divider" />
+          <span className="hs-proof-rating">
+            <span className="hs-stars">
+              <Star size={14} fill="currentColor" />
+              <Star size={14} fill="currentColor" />
+              <Star size={14} fill="currentColor" />
+              <Star size={14} fill="currentColor" />
+              <StarHalf size={14} fill="currentColor" />
+            </span>
+            <strong>4.5</strong> Ratings
+          </span>
+        </div>
       </div>
 
-      {/* Scroll cue */}
-      <motion.div
-        className="hero-scroll-cue"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.8 }}
-      >
-        <motion.div
-          animate={{ y: [0, 9, 0] }}
-          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-          className="hero-scroll-mouse"
-        >
-          <div className="hero-scroll-dot" />
-        </motion.div>
-      </motion.div>
+      {/* ── Full-bleed tab strip ──────────────── */}
+      <div className="hs-tabbar" role="tablist" aria-label="Live examples">
+        {(Object.keys(TAB_LABELS) as FlowTab[]).map((tab) => {
+          const { label, icon: TabIcon } = TAB_LABELS[tab];
+          const active = activeTab === tab;
+          return (
+            <button
+              key={tab}
+              role="tab"
+              aria-selected={active}
+              className={`hs-tab${active ? " is-active" : ""}`}
+              onClick={() => setActiveTab(tab)}
+            >
+              <TabIcon size={16} />
+              <span>{label}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* ── Dotted flow canvas ────────────────── */}
+      <div ref={canvasRef} className="hs-canvas">
+        <div className="hs-flow" key={activeTab}>
+          <FlowNode role="input" data={activeData.input} />
+          <Connector />
+          <FlowNode role="action" data={activeData.action} />
+          <Connector />
+          <FlowNode role="output" data={activeData.output} />
+        </div>
+      </div>
     </section>
   );
 }
