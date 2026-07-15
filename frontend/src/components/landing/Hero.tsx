@@ -4,17 +4,13 @@ import { useState, useEffect, useRef } from "react";
 import {
   Flame,
   ArrowRight,
-  DollarSign,
   Star,
-  StarHalf,
   TrendingUp,
-  Headphones,
   Bell,
   RefreshCw,
   Clipboard,
   FileText,
   Search,
-  Building,
   Check,
   MessageSquare,
   Mail,
@@ -27,21 +23,19 @@ import {
   ShieldCheck,
   HardDrive,
   BarChart,
-  Key,
-  ListCollapse,
-  Globe,
-  Loader2,
-  Cpu,
   Settings,
   MoreVertical,
   Clock3,
   PlayCircle,
   CheckCircle2,
+  BatteryMedium,
+  MousePointerClick,
+  Monitor,
 } from "lucide-react";
 import gsap from "gsap";
 
 /* ── Types ─────────────────────────────────────── */
-type FlowTab = "lead" | "meeting" | "follow" | "sync" | "reporting" | "drafting";
+type FlowTab = "clipboard" | "battery" | "notifications" | "network" | "storage" | "idle";
 
 interface FlowDetail {
   text: string;
@@ -65,208 +59,178 @@ interface FlowData {
   output: FlowNodeData;
 }
 
-/* ── Diagram content (high fidelity AI Agent workflows) ── */
+/* ── Diagram content (high fidelity WebDev Power Kit workflows) ── */
 const DIAGRAMS: Record<FlowTab, FlowData> = {
-  lead: {
+  clipboard: {
     input: {
-      title: "New Lead Webhook",
+      title: "Trigger Event",
       time: "0.0 sec",
-      desc: "Triggers automatically on user submission form.",
-      icon: TrendingUp,
+      desc: "User clicks 'Copy Link' button on a webpage.",
+      icon: MousePointerClick,
     },
     action: {
-      title: "Lead Enrichment",
-      time: "4.2 sec",
-      desc: "Analyze lead profiles against target company parameters.",
+      title: "copyToClipboard()",
+      time: "0.05 sec",
+      desc: "Executes Async Clipboard API write with fallback support.",
       details: [
-        { text: "Clearbit API lookup", icon: Search, iconColor: "#2563eb" },
-        { text: "HubSpot data matching", icon: Building, iconColor: "#ea580c" },
+        { text: "Fallback to execCommand if unsupported", icon: Code, iconColor: "#2563eb" },
+        { text: "Handles permission prompt states", icon: ShieldCheck, iconColor: "#16a34a" },
       ],
-      extra: (
-        <div className="hs-loader-pill">
-          <span>CRM validation...</span>
-          <Loader2 size={13} className="hs-loader-spinner" />
-        </div>
-      ),
-      icon: Cpu,
-      modelChip: "GPT-4-1 Mini",
+      icon: CpuIcon,
+      modelChip: "Browser Engine",
     },
     output: {
-      title: "Enriched Record",
-      time: "0.8 sec",
-      desc: "Profile updated and assigned to representative.",
+      title: "Clipboard Sync",
+      time: "0.08 sec",
+      desc: "Successfully copied to native clipboard.",
       details: [
-        { text: "Salesforce updated", icon: Check, iconColor: "#16a34a" },
-        { text: "Slack alert dispatched", icon: MessageSquare, iconColor: "#36c5f0" },
+        { text: "Trigger local success toast", icon: Check, iconColor: "#16a34a" },
+        { text: "Allow user paste action", icon: Clipboard, iconColor: "#2563eb" },
       ],
       icon: CheckCircle2,
     },
   },
-  meeting: {
+  battery: {
     input: {
-      title: "Calendar Check",
+      title: "State Shift",
       time: "0.0 sec",
-      desc: "Detects upcoming meetings 15 minutes prior.",
-      icon: Calendar,
+      desc: "Device unplugged (discharging state detected).",
+      icon: BatteryMedium,
     },
     action: {
-      title: "Briefing Research",
-      time: "12 sec",
-      desc: "Retrieves context for all meeting attendees.",
+      title: "getBatteryInfo()",
+      time: "0.12 sec",
+      desc: "Queries Battery Manager API and hooks listeners.",
       details: [
-        { text: "LinkedIn profile lookup", icon: User, iconColor: "#0077b5" },
-        { text: "Gmail thread history digest", icon: Mail, iconColor: "#ea4335" },
+        { text: "Tracks dischargingTime remaining", icon: Clock3, iconColor: "#ea580c" },
+        { text: "Listens to levelchange events", icon: RefreshCw, iconColor: "#2563eb" },
       ],
-      extra: (
-        <div className="hs-loader-pill">
-          <span>Generating briefing note...</span>
-          <Loader2 size={13} className="hs-loader-spinner" />
-        </div>
-      ),
-      icon: Cpu,
-      modelChip: "Claude 3.5 Sonnet",
+      icon: CpuIcon,
+      modelChip: "Battery API",
     },
     output: {
-      title: "Brief Prepared",
-      time: "1.5 sec",
-      desc: "Talking points compiled and uploaded.",
+      title: "Status Broadcasted",
+      time: "0.15 sec",
+      desc: "App adjusts background sync and heavy assets.",
       details: [
-        { text: "Notion brief uploaded", icon: FileText, iconColor: "#111" },
-        { text: "Email summary dispatched", icon: Mail, iconColor: "#ea4335" },
+        { text: "Low power mode enabled", icon: AlertTriangle, iconColor: "#ea580c" },
+        { text: "Updated UI level display", icon: Check, iconColor: "#16a34a" },
       ],
       icon: CheckCircle2,
     },
   },
-  follow: {
+  notifications: {
     input: {
-      title: "Email Ingestion",
+      title: "Alert Ingestion",
       time: "0.0 sec",
-      desc: "Listens for customer support and sales emails.",
-      icon: Mail,
+      desc: "New notification triggered by app state change.",
+      icon: Bell,
     },
     action: {
-      title: "Intent Classifier",
-      time: "2.1 sec",
-      desc: "Categorizes email intent and sentiment scores.",
+      title: "showNotification()",
+      time: "0.22 sec",
+      desc: "Validates permissions and sends push payload.",
       details: [
-        { text: "Urgency evaluation", icon: AlertTriangle, iconColor: "#ea580c" },
-        { text: "Draft reply generation", icon: Pencil, iconColor: "#2563eb" },
+        { text: "Requests permission if default", icon: ShieldCheck, iconColor: "#16a34a" },
+        { text: "Configures action buttons & badge", icon: Settings, iconColor: "#2563eb" },
       ],
-      icon: Cpu,
-      modelChip: "GPT-4-1 Mini",
+      icon: CpuIcon,
+      modelChip: "Push Manager",
     },
     output: {
-      title: "Auto-Draft Ready",
-      time: "0.4 sec",
-      desc: "Pre-written response queued for review.",
+      title: "Alert Displayed",
+      time: "0.25 sec",
+      desc: "Native system notification shown to the user.",
       details: [
-        { text: "Gmail draft saved", icon: Mail, iconColor: "#ea4335" },
-        { text: "Assigned alert in Slack", icon: MessageSquare, iconColor: "#36c5f0" },
+        { text: "Notification shown in OS drawer", icon: Bell, iconColor: "#ea580c" },
+        { text: "OnClick callbacks bound", icon: Check, iconColor: "#16a34a" },
       ],
       icon: CheckCircle2,
     },
   },
-  sync: {
+  network: {
     input: {
-      title: "Database Trigger",
+      title: "Connectivity Shift",
       time: "0.0 sec",
-      desc: "Detects new record insertions in PostgreSQL.",
+      desc: "User connection drops (offline status detected).",
+      icon: PlayCircle,
+    },
+    action: {
+      title: "onNetworkChange()",
+      time: "0.18 sec",
+      desc: "Observes network speed and offline status changes.",
+      details: [
+        { text: "Starts heartbeat health check", icon: RefreshCw, iconColor: "#2563eb" },
+        { text: "Verifies gateway routing status", icon: Monitor, iconColor: "#ea580c" },
+      ],
+      icon: CpuIcon,
+      modelChip: "Network Info",
+    },
+    output: {
+      title: "UI Fallback Safe",
+      time: "0.22 sec",
+      desc: "App switches to offline recovery mode layout.",
+      details: [
+        { text: "Displays offline alert banner", icon: AlertTriangle, iconColor: "#ea580c" },
+        { text: "Queues API calls in IndexedDB", icon: Database, iconColor: "#16a34a" },
+      ],
+      icon: CheckCircle2,
+    },
+  },
+  storage: {
+    input: {
+      title: "Write Triggered",
+      time: "0.0 sec",
+      desc: "Application triggers user preference changes.",
       icon: Database,
     },
     action: {
-      title: "Schema Transformer",
-      time: "0.9 sec",
-      desc: "Validates, maps, and normalizes columns.",
+      title: "setItem<UserPrefs>()",
+      time: "0.02 sec",
+      desc: "Serializes and writes preferences to localStorage.",
       details: [
-        { text: "Type validation checks", icon: Code, iconColor: "#2563eb" },
-        { text: "PII scrubbing & hash key", icon: ShieldCheck, iconColor: "#16a34a" },
+        { text: "Runs strict generic validation", icon: Code, iconColor: "#2563eb" },
+        { text: "Automatic JSON serialization", icon: Database, iconColor: "#16a34a" },
       ],
-      extra: (
-        <div className="hs-loader-pill">
-          <span>Encrypting payload...</span>
-          <Loader2 size={13} className="hs-loader-spinner" />
-        </div>
-      ),
-      icon: Cpu,
-      modelChip: "Llama 3.1 70B",
+      icon: CpuIcon,
+      modelChip: "LocalStore Sync",
     },
     output: {
-      title: "Databases Synced",
-      time: "0.2 sec",
-      desc: "Target warehouses successfully updated.",
+      title: "LocalStorage Synced",
+      time: "0.03 sec",
+      desc: "Browser storage synced across active frames.",
       details: [
-        { text: "RDS PostgreSQL upsert", icon: HardDrive, iconColor: "#2563eb" },
-        { text: "BigQuery sync ingestion", icon: BarChart, iconColor: "#ea4335" },
+        { text: "Dispatches storage sync event", icon: RefreshCw, iconColor: "#2563eb" },
+        { text: "Locks theme state values", icon: Check, iconColor: "#16a34a" },
       ],
       icon: CheckCircle2,
     },
   },
-  reporting: {
+  idle: {
     input: {
-      title: "Scheduled Trigger",
+      title: "Inactivity Shift",
       time: "0.0 sec",
-      desc: "The agent activates the report workflow.",
+      desc: "User stops interacting with mouse, key, or scroll.",
       icon: Clock3,
     },
     action: {
-      title: "Data Aggregation",
-      time: "18 sec",
-      desc: "Collecting metrics and compiling report fields.",
+      title: "onIdle(30000, logout)",
+      time: "30.0 sec",
+      desc: "Sets up activity listeners and debounces timers.",
       details: [
-        { text: "Collecting metrics", icon: FileText, iconColor: "#16a34a" },
-        { text: "Analyzing data", icon: TrendingUp, iconColor: "#2563eb" },
+        { text: "Hooks keydown & pointer events", icon: Code, iconColor: "#2563eb" },
+        { text: "Auto-debounces active triggers", icon: Clock3, iconColor: "#ea580c" },
       ],
-      extra: (
-        <div className="hs-loader-pill">
-          <span>Insight generation...</span>
-          <Loader2 size={13} className="hs-loader-spinner" />
-        </div>
-      ),
-      icon: Cpu,
-      modelChip: "GPT-4-1 Mini",
+      icon: CpuIcon,
+      modelChip: "Idle Tracker",
     },
     output: {
-      title: "Report Formatted",
-      time: "1.1 sec",
-      desc: "Automated weekly or monthly performance reports.",
+      title: "Session Reset",
+      time: "30.1 sec",
+      desc: "Secures application state and destroys cookie tokens.",
       details: [
-        { text: "Report posted", icon: Mail, iconColor: "#ea4335" },
-        { text: "Report posted", icon: MessageSquare, iconColor: "#36c5f0" },
-      ],
-      icon: CheckCircle2,
-    },
-  },
-  drafting: {
-    input: {
-      title: "Topic Submission",
-      time: "0.0 sec",
-      desc: "Slack command triggers article draft request.",
-      icon: MessageSquare,
-    },
-    action: {
-      title: "SEO & Copy Writing",
-      time: "24 sec",
-      desc: "Researches context and drafts content structure.",
-      details: [
-        { text: "Keyword analysis", icon: Key, iconColor: "#ea580c" },
-        { text: "Outline structure draft", icon: ListCollapse, iconColor: "#2563eb" },
-      ],
-      extra: (
-        <div className="hs-loader-pill">
-          <span>Drafting 800-word post...</span>
-          <Loader2 size={13} className="hs-loader-spinner" />
-        </div>
-      ),
-      icon: Cpu,
-      modelChip: "Claude 3.5 Sonnet",
-    },
-    output: {
-      title: "Ready to Publish",
-      time: "1.8 sec",
-      desc: "CMS draft and corresponding social copy ready.",
-      details: [
-        { text: "Ghost CMS draft saved", icon: Globe, iconColor: "#ea580c" },
-        { text: "X/Twitter posts drafted", icon: MessageSquare, iconColor: "#111" },
+        { text: "Clears sensitive memory cache", icon: Database, iconColor: "#16a34a" },
+        { text: "Redirects to secure login screen", icon: Check, iconColor: "#2563eb" },
       ],
       icon: CheckCircle2,
     },
@@ -274,13 +238,18 @@ const DIAGRAMS: Record<FlowTab, FlowData> = {
 };
 
 const TAB_LABELS: Record<FlowTab, { label: string; icon: React.ComponentType<{ size?: number }> }> = {
-  lead: { label: "Lead Qualifier", icon: TrendingUp },
-  meeting: { label: "Meeting Prep", icon: Headphones },
-  follow: { label: "Follow-ups", icon: Bell },
-  sync: { label: "Data Sync", icon: RefreshCw },
-  reporting: { label: "Reporting", icon: Clipboard },
-  drafting: { label: "Content Drafting", icon: FileText },
+  clipboard: { label: "Clipboard Sync", icon: Clipboard },
+  battery: { label: "Battery Monitor", icon: BatteryMedium },
+  notifications: { label: "Notification Push", icon: Bell },
+  network: { label: "Network Observer", icon: RefreshCw },
+  storage: { label: "Storage State", icon: Database },
+  idle: { label: "Auto-Logout", icon: Clock3 },
 };
+
+/* Wrapper icon for Custom actions to replace generic Cpu */
+function CpuIcon({ size = 16, className }: { size?: number; className?: string }) {
+  return <Settings size={size} className={className} />;
+}
 
 /* ── Flow node (Input / Action / Output card) ──── */
 function FlowNode({
@@ -292,7 +261,7 @@ function FlowNode({
 }) {
   const tag = {
     input: { label: "Input", icon: PlayCircle, cls: "hs-tag--blue" },
-    action: { label: "Action", icon: Cpu, cls: "hs-tag--orange" },
+    action: { label: "Action", icon: CpuIcon, cls: "hs-tag--orange" },
     output: { label: "Output", icon: CheckCircle2, cls: "hs-tag--green" },
   }[role];
   const TagIcon = tag.icon;
@@ -383,7 +352,7 @@ interface HeroProps {
 }
 
 export function Hero({ onNavigate }: HeroProps) {
-  const [activeTab, setActiveTab] = useState<FlowTab>("reporting");
+  const [activeTab, setActiveTab] = useState<FlowTab>("clipboard");
   const topRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
   const reduced = useRef(false);
@@ -489,18 +458,19 @@ export function Hero({ onNavigate }: HeroProps) {
             <Flame size={12} />
             New
           </span>
-          <span className="hs-badge-text">Introducing AI Agent</span>
+          <span className="hs-badge-text">v2.2.0 Stable Release</span>
         </div>
 
         <h1 className="hs-h1 hs-reveal">
-          Work with AI agent
+          Orchestrate Browser APIs
           <br />
-          that handles your daily operations
+          with zero-dependency wrappers.
         </h1>
 
         <p className="hs-sub hs-reveal">
-          Automate routine tasks, connect your tools, and let your AI agent coordinate
-          workflows so you can focus on strategy, not busywork.
+          A lightweight toolkit of 15+ typed browser wrappers. Automate tab state
+          checks, battery logs, and network fallbacks without writing custom event
+          listeners.
         </p>
 
         <div className="hs-actions hs-reveal">
@@ -508,10 +478,14 @@ export function Hero({ onNavigate }: HeroProps) {
             Get Started
             <ArrowRight size={15} />
           </button>
-          <button className="hs-btn-outline" onClick={() => onNavigate("pricing")}>
-            <DollarSign size={15} />
-            View Pricing
-          </button>
+          <a
+            className="hs-btn-outline"
+            href="https://www.npmjs.com/package/webdev-power-kit"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            View on npm
+          </a>
         </div>
 
         <div className="hs-proof hs-reveal">
@@ -522,7 +496,7 @@ export function Hero({ onNavigate }: HeroProps) {
             <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&h=100&q=80" alt="Avatar 4" />
           </div>
           <span className="hs-proof-text">
-            <strong>12K+</strong> Users
+            <strong>5K+</strong> Downloads
           </span>
           <span className="hs-proof-divider" />
           <span className="hs-proof-rating">
@@ -531,9 +505,9 @@ export function Hero({ onNavigate }: HeroProps) {
               <Star size={14} fill="currentColor" />
               <Star size={14} fill="currentColor" />
               <Star size={14} fill="currentColor" />
-              <StarHalf size={14} fill="currentColor" />
+              <Star size={14} fill="currentColor" />
             </span>
-            <strong>4.5</strong> Ratings
+            <strong>v2.2.0</strong> Stable
           </span>
         </div>
       </div>
