@@ -3768,7 +3768,17 @@ a.nav-item.active .nav-item-icon { opacity: 1; color: var(--text-1); }
   border-color: var(--border-2);
 }
 
-@media (max-width: 960px) {
+@media (max-width: 1200px) {
+  .navbar-links {
+    gap: 1rem;
+    margin-left: 1.5rem;
+  }
+  .navbar-link-btn {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 1080px) {
   .navbar-links {
     display: none;
   }
@@ -3777,6 +3787,12 @@ a.nav-item.active .nav-item-icon { opacity: 1; color: var(--text-1); }
   }
   .navbar-mobile-toggle {
     display: flex;
+  }
+}
+
+@media (max-width: 640px) {
+  .navbar-npm-btn {
+    display: none !important;
   }
 }
 

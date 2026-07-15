@@ -125,7 +125,7 @@ export function Navbar() {
             href="https://www.npmjs.com/package/webdev-power-kit"
             target="_blank"
             rel="noopener noreferrer"
-            className="btn btn-brand btn-sm"
+            className="btn btn-brand btn-sm navbar-npm-btn"
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.96 }}
             style={{ display: "inline-flex" }}
