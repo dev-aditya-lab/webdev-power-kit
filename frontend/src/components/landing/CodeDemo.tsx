@@ -2,9 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Code2, ArrowRight, Circle } from "lucide-react";
-import { Reveal } from "@/components/ui/Reveal";
-import { BorderBeam } from "@/components/ui/BorderBeam";
+import { Code2, ArrowRight } from "lucide-react";
 
 const TABS = [
   {
@@ -69,35 +67,34 @@ export function NetworkStatus() {
   },
 ];
 
-// Syntax highlight tokens (simple keyword coloring)
-function highlightCode(code: string, lang: string) {
-  const keywords = ["import", "from", "const", "let", "await", "async", "if", "return", "export", "function", "interface", "class"];
+// B&W syntax highlight — white/gray palette only
+function highlightCode(code: string) {
+  const keywords = ["import", "from", "const", "let", "await", "async", "if", "return", "export", "function", "interface", "class", "use"];
   const types = ["string", "number", "boolean", "null", "undefined", "User"];
   const strings = /('.*?'|".*?"|`.*?`)/g;
   const comments = /(\/\/.*)/g;
 
-  // Escape HTML
   let escaped = code
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
 
-  // Highlight strings
-  escaped = escaped.replace(strings, '<span style="color:#22c55e">$1</span>');
-  // Highlight comments
-  escaped = escaped.replace(comments, '<span style="color:#4a5568">$1</span>');
-  // Highlight keywords
-  keywords.forEach(kw => {
+  // Strings → slightly dimmer
+  escaped = escaped.replace(strings, '<span style="color:#aaaaaa">$1</span>');
+  // Comments → very dim
+  escaped = escaped.replace(comments, '<span style="color:#555555">$1</span>');
+  // Keywords → white
+  keywords.forEach((kw) => {
     escaped = escaped.replace(
       new RegExp(`\\b(${kw})\\b`, "g"),
-      '<span style="color:#6ab8ff">$1</span>'
+      '<span style="color:#ffffff">$1</span>'
     );
   });
-  // Highlight types
-  types.forEach(t => {
+  // Types → light gray
+  types.forEach((t) => {
     escaped = escaped.replace(
       new RegExp(`\\b(${t})\\b`, "g"),
-      '<span style="color:#a855f7">$1</span>'
+      '<span style="color:#cccccc">$1</span>'
     );
   });
   return escaped;
@@ -111,82 +108,71 @@ export function CodeDemo({ onNavigate }: CodeDemoProps) {
   const [activeTab, setActiveTab] = useState(0);
 
   return (
-    <section className="code-demo-section">
-      <div className="code-demo-inner">
-        <div className="code-demo-grid">
-          {/* Left: copy */}
-          <div className="code-demo-copy">
-            <Reveal>
-              <div className="section-eyebrow">
-                <Code2 size={14} />
-                See it in Action
-              </div>
-              <h2 className="section-title">
-                Clean code,
-                <br />
-                <span className="text-gradient">every time.</span>
-              </h2>
-              <p className="section-sub">
-                One import. One function call. Fully typed. Works in JavaScript,
-                TypeScript, and React out of the box.
-              </p>
-              <motion.button
-                className="btn btn-brand"
-                onClick={() => onNavigate("quick-start")}
-                whileHover={{ scale: 1.03, boxShadow: "0 8px 30px rgba(59,158,255,0.35)" }}
-                whileTap={{ scale: 0.97 }}
-                style={{ marginTop: "1.75rem" }}
-              >
-                View Quick Start <ArrowRight size={16} />
-              </motion.button>
-            </Reveal>
+    <section className="code-demo-bw">
+      <div className="code-demo-bw-inner">
+        <div className="code-demo-bw-grid">
+          {/* Left copy */}
+          <div className="code-demo-bw-copy">
+            <p className="section-eyebrow" style={{ justifyContent: "flex-start" }}>
+              <Code2 size={13} />
+              See it in Action
+            </p>
+            <h2 className="code-demo-bw-h2">
+              Clean code,<br />
+              <span className="hs-accent">every time.</span>
+            </h2>
+            <p className="code-demo-bw-sub">
+              One import. One function call. Fully typed. Works in JavaScript,
+              TypeScript, and React out of the box.
+            </p>
+            <button
+              className="btn-bw-primary"
+              onClick={() => onNavigate("quick-start")}
+              style={{ marginTop: "1.75rem" }}
+            >
+              View Quick Start <ArrowRight size={16} />
+            </button>
           </div>
 
           {/* Right: code window */}
-          <Reveal delay={0.15}>
-            <BorderBeam colorFrom="#3B9EFF" colorTo="#a855f7" duration={4} borderWidth={1.5}>
-              <div className="code-window">
-                {/* Title bar */}
-                <div className="code-window-bar">
-                  <div className="code-window-dots">
-                    <span style={{ background: "#ff5f57" }} />
-                    <span style={{ background: "#ffbd2e" }} />
-                    <span style={{ background: "#28c840" }} />
-                  </div>
-                  {/* Tab buttons */}
-                  <div className="code-window-tabs">
-                    {TABS.map((tab, i) => (
-                      <button
-                        key={tab.label}
-                        className={`code-window-tab${activeTab === i ? " active" : ""}`}
-                        onClick={() => setActiveTab(i)}
-                      >
-                        {tab.label}
-                      </button>
-                    ))}
-                  </div>
-                  <div className="code-window-lang">.{TABS[activeTab].lang}</div>
-                </div>
-
-                {/* Code content */}
-                <div className="code-window-body">
-                  <AnimatePresence mode="wait">
-                    <motion.pre
-                      key={activeTab}
-                      initial={{ opacity: 0, y: 6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -6 }}
-                      transition={{ duration: 0.2 }}
-                      className="code-window-pre"
-                      dangerouslySetInnerHTML={{
-                        __html: highlightCode(TABS[activeTab].code, TABS[activeTab].lang),
-                      }}
-                    />
-                  </AnimatePresence>
-                </div>
+          <div className="code-window-bw">
+            {/* Title bar */}
+            <div className="code-window-bw-bar">
+              <div className="code-window-dots">
+                <span style={{ background: "#333" }} />
+                <span style={{ background: "#444" }} />
+                <span style={{ background: "#555" }} />
               </div>
-            </BorderBeam>
-          </Reveal>
+              {/* Tabs */}
+              <div className="code-window-bw-tabs">
+                {TABS.map((tab, i) => (
+                  <button
+                    key={tab.label}
+                    className={`code-window-bw-tab${activeTab === i ? " active" : ""}`}
+                    onClick={() => setActiveTab(i)}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+              <div className="code-window-bw-lang">.{TABS[activeTab].lang}</div>
+            </div>
+
+            {/* Code body */}
+            <div className="code-window-bw-body">
+              <AnimatePresence mode="wait">
+                <motion.pre
+                  key={activeTab}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.2 }}
+                  className="code-window-bw-pre"
+                  dangerouslySetInnerHTML={{ __html: highlightCode(TABS[activeTab].code) }}
+                />
+              </AnimatePresence>
+            </div>
+          </div>
         </div>
       </div>
     </section>

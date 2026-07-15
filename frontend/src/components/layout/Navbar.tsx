@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { ExternalLink } from "lucide-react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ExternalLink, Star } from "lucide-react";
-import { ALL_NAV_ITEMS } from "@/lib/nav";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 function GithubIcon({ size = 15 }: { size?: number }) {
   return (
@@ -14,15 +15,9 @@ function GithubIcon({ size = 15 }: { size?: number }) {
   );
 }
 
-interface NavbarProps {
-  activeId: string | null;
-  onToggleSidebar: () => void;
-  sidebarOpen: boolean;
-}
-
-export function Navbar({ activeId, onToggleSidebar, sidebarOpen }: NavbarProps) {
+/** Landing page navbar — no sidebar state, full-width */
+export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const activeItem = ALL_NAV_ITEMS.find((i) => i.id === activeId);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
@@ -32,82 +27,44 @@ export function Navbar({ activeId, onToggleSidebar, sidebarOpen }: NavbarProps) 
 
   return (
     <header
-      className={`navbar${scrolled ? " navbar-scrolled" : ""}`}
+      className={`navbar landing-navbar${scrolled ? " navbar-scrolled" : ""}`}
       style={{
-        // Increase blur and shadow when scrolled
-        background: scrolled
-          ? "rgba(9,9,14,0.88)"
-          : "rgba(9,9,14,0.72)",
-        backdropFilter: scrolled ? "blur(32px) saturate(1.4)" : "blur(16px)",
-        WebkitBackdropFilter: scrolled ? "blur(32px) saturate(1.4)" : "blur(16px)",
-        boxShadow: scrolled ? "0 1px 0 rgba(255,255,255,0.06), 0 8px 32px rgba(0,0,0,0.4)" : "0 1px 0 rgba(255,255,255,0.05)",
+        left: 0,
+        background: scrolled ? "var(--navbar-bg-scrolled)" : "var(--navbar-bg)",
+        backdropFilter: scrolled ? "blur(32px) saturate(1.3)" : "blur(16px)",
+        WebkitBackdropFilter: scrolled ? "blur(32px) saturate(1.3)" : "blur(16px)",
+        boxShadow: scrolled
+          ? "0 1px 0 var(--border), 0 8px 32px rgba(0,0,0,0.2)"
+          : "0 1px 0 var(--border)",
         transition: "all 0.3s cubic-bezier(0.4,0,0.2,1)",
       }}
     >
+      {/* Left: logo */}
       <div className="navbar-left">
-        {/* Mobile sidebar toggle */}
-        <motion.button
-          className="navbar-menu-btn"
-          onClick={onToggleSidebar}
-          aria-label="Toggle menu"
-          whileTap={{ scale: 0.9 }}
-        >
-          <AnimatePresence mode="wait">
-            {sidebarOpen ? (
-              <motion.span
-                key="close"
-                initial={{ rotate: -90, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                exit={{ rotate: 90, opacity: 0 }}
-                transition={{ duration: 0.15 }}
-              >
-                <X size={18} />
-              </motion.span>
-            ) : (
-              <motion.span
-                key="menu"
-                initial={{ rotate: 90, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                exit={{ rotate: -90, opacity: 0 }}
-                transition={{ duration: 0.15 }}
-              >
-                <Menu size={18} />
-              </motion.span>
-            )}
-          </AnimatePresence>
-        </motion.button>
-
-        {/* Breadcrumb / current section */}
-        <AnimatePresence mode="wait">
-          {activeItem ? (
-            <motion.nav
-              key="breadcrumb"
-              className="navbar-breadcrumb"
-              initial={{ opacity: 0, x: -8 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -8 }}
-              transition={{ duration: 0.2 }}
-            >
-              <span className="navbar-bc-root">Docs</span>
-              <span className="navbar-bc-sep">/</span>
-              <span className="navbar-bc-current">{activeItem.label}</span>
-            </motion.nav>
-          ) : (
-            <motion.span
-              key="brand"
-              className="navbar-brand-label"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              webdev-power-kit
-            </motion.span>
-          )}
-        </AnimatePresence>
+        <Link href="/" className="navbar-logo-link">
+          <Image
+            src="/webdev logo long.png"
+            alt="WebDev Power Kit"
+            width={130}
+            height={26}
+            className="navbar-logo"
+            priority
+          />
+        </Link>
       </div>
 
+      {/* Right: docs link + theme + github + npm */}
       <div className="navbar-right">
+        <Link
+          href="/docs"
+          className="btn btn-ghost btn-sm"
+          style={{ color: "var(--text-2)", fontWeight: 500 }}
+        >
+          Docs
+        </Link>
+
+        <ThemeToggle />
+
         <motion.a
           href="https://github.com/dev-aditya-lab/webdev-power-kit"
           target="_blank"
@@ -125,7 +82,7 @@ export function Navbar({ activeId, onToggleSidebar, sidebarOpen }: NavbarProps) 
           target="_blank"
           rel="noopener"
           className="btn btn-brand btn-sm"
-          whileHover={{ scale: 1.04, boxShadow: "0 4px 20px rgba(59,158,255,0.3)" }}
+          whileHover={{ scale: 1.04 }}
           whileTap={{ scale: 0.96 }}
         >
           npm

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import Link from "next/link";
 import Image from "next/image";
 import { Heart } from "lucide-react";
 
@@ -28,36 +28,28 @@ export function Footer() {
           <div className="footer-link-col">
             <div className="footer-col-label">Documentation</div>
             {[
-              { label: "Introduction", id: "introduction" },
-              { label: "Installation", id: "installation" },
-              { label: "Quick Start", id: "quick-start" },
-              { label: "TypeScript", id: "typescript" },
+              { label: "Introduction", slug: "introduction" },
+              { label: "Installation", slug: "installation" },
+              { label: "Quick Start", slug: "quick-start" },
+              { label: "TypeScript", slug: "typescript" },
             ].map((l) => (
-              <a
-                key={l.id}
-                href={`#${l.id}`}
-                className="footer-link"
-              >
+              <Link key={l.slug} href={`/docs/${l.slug}`} className="footer-link">
                 {l.label}
-              </a>
+              </Link>
             ))}
           </div>
 
           <div className="footer-link-col">
             <div className="footer-col-label">APIs</div>
             {[
-              { label: "Clipboard", id: "clipboard" },
-              { label: "Battery", id: "battery" },
-              { label: "Geolocation", id: "geolocation" },
-              { label: "Network", id: "network" },
+              { label: "Clipboard", slug: "clipboard" },
+              { label: "Battery", slug: "battery" },
+              { label: "Geolocation", slug: "geolocation" },
+              { label: "Network", slug: "network" },
             ].map((l) => (
-              <a
-                key={l.id}
-                href={`#${l.id}`}
-                className="footer-link"
-              >
+              <Link key={l.slug} href={`/docs/${l.slug}`} className="footer-link">
                 {l.label}
-              </a>
+              </Link>
             ))}
           </div>
 
@@ -67,7 +59,7 @@ export function Footer() {
               { label: "GitHub", href: "https://github.com/dev-aditya-lab/webdev-power-kit" },
               { label: "npm", href: "https://www.npmjs.com/package/webdev-power-kit" },
               { label: "Portfolio", href: "https://devaditya.dev" },
-              { label: "Changelog", href: "#changelog" },
+              { label: "Changelog", href: "/docs/changelog" },
             ].map((l) => (
               <a
                 key={l.label}

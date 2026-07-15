@@ -1,18 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  ArrowRight,
-  Copy,
-  Check,
-  Sparkles,
-  Terminal,
-  Star,
-} from "lucide-react";
-import { MeteorShower } from "@/components/ui/MeteorShower";
-import { ShinyButton } from "@/components/ui/ShinyButton";
+import { useState, useEffect, useRef } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowRight, Copy, Check, Terminal } from "lucide-react";
+import gsap from "gsap";
+import { fetchGitHubProfile } from "@/lib/github";
 
+// ── GitHub icon ─────────────────────────────
 function GithubIcon({ size = 16 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
@@ -21,17 +15,15 @@ function GithubIcon({ size = 16 }: { size?: number }) {
   );
 }
 
-// Rotating word in headline
+// ── Rotating word ───────────────────────────
 const ROTATING_WORDS = ["Simplified.", "Supercharged.", "Unified.", "Effortless."];
 
 function RotatingWord() {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setIndex((i) => (i + 1) % ROTATING_WORDS.length);
-    }, 2200);
-    return () => clearInterval(timer);
+    const t = setInterval(() => setIndex((i) => (i + 1) % ROTATING_WORDS.length), 2400);
+    return () => clearInterval(t);
   }, []);
 
   return (
@@ -40,10 +32,10 @@ function RotatingWord() {
         <motion.span
           key={index}
           className="hero-h1-accent"
-          initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
+          initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          exit={{ opacity: 0, y: -20, filter: "blur(8px)" }}
-          transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+          exit={{ opacity: 0, y: -24, filter: "blur(8px)" }}
+          transition={{ duration: 0.45, ease: [0.4, 0, 0.2, 1] }}
           style={{ display: "inline-block" }}
         >
           {ROTATING_WORDS[index]}
@@ -53,7 +45,7 @@ function RotatingWord() {
   );
 }
 
-// Animated install command
+// ── Install command ─────────────────────────
 function InstallCommand() {
   const [copied, setCopied] = useState(false);
 
@@ -62,30 +54,26 @@ function InstallCommand() {
       await navigator.clipboard.writeText("npm install webdev-power-kit");
       setCopied(true);
       setTimeout(() => setCopied(false), 2200);
-    } catch {
-      /* silent */
-    }
+    } catch { /* silent */ }
   };
 
   return (
     <motion.button
       className="hero-install-cmd"
       onClick={handleCopy}
-      whileHover={{ scale: 1.02, borderColor: "rgba(59,158,255,0.5)" }}
-      whileTap={{ scale: 0.98 }}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.97 }}
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.9, duration: 0.5 }}
+      transition={{ delay: 0.85, duration: 0.5 }}
     >
-      <span className="hero-install-terminal">
-        <Terminal size={13} />
-      </span>
+      <span className="hero-install-terminal"><Terminal size={13} /></span>
       <span className="hero-install-prompt">$</span>
       <span className="hero-install-pkg">npm install</span>
       <span className="hero-install-name">webdev-power-kit</span>
       <motion.span
         className="hero-install-copy"
-        animate={copied ? { scale: [1, 1.4, 1], color: "#22c55e" } : {}}
+        animate={copied ? { scale: [1, 1.35, 1] } : {}}
         transition={{ duration: 0.3 }}
       >
         {copied ? <Check size={13} /> : <Copy size={13} />}
@@ -94,147 +82,242 @@ function InstallCommand() {
   );
 }
 
-// Animated floating badges
-const FLOAT_BADGES = [
-  { label: "TypeScript", color: "#3B82F6", delay: 0.3, x: "-60%", y: "-40%" },
-  { label: "Zero Deps", color: "#22c55e", delay: 0.5, x: "60%", y: "-55%" },
-  { label: "15+ APIs", color: "#a855f7", delay: 0.7, x: "-70%", y: "40%" },
-  { label: "MIT License", color: "#f97316", delay: 0.9, x: "65%", y: "35%" },
-];
+// ── Stat counter (GSAP count-up) ─────────────
+function StatCounter({ value, suffix = "" }: { value: number; suffix?: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || value === 0) return;
+    const obj = { val: 0 };
+    gsap.to(obj, {
+      val: value,
+      duration: 1.6,
+      delay: 1.2,
+      ease: "power2.out",
+      onUpdate: () => { el.textContent = Math.round(obj.val) + suffix; },
+    });
+  }, [value, suffix]);
+  return <span ref={ref}>0{suffix}</span>;
+}
 
+// ── Hero SVG bracket decoration ──────────────
+function BracketSvg() {
+  const path1Ref = useRef<SVGPathElement>(null);
+  const path2Ref = useRef<SVGPathElement>(null);
+
+  useEffect(() => {
+    const paths = [path1Ref.current, path2Ref.current].filter(Boolean) as SVGPathElement[];
+    paths.forEach((p, i) => {
+      const len = p.getTotalLength();
+      gsap.fromTo(p,
+        { strokeDasharray: len, strokeDashoffset: len },
+        { strokeDashoffset: 0, duration: 1.2, delay: 0.3 + i * 0.2, ease: "power2.inOut" }
+      );
+    });
+  }, []);
+
+  return (
+    <svg
+      className="hero-bracket-svg"
+      viewBox="0 0 120 140"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      {/* Left bracket < */}
+      <path
+        ref={path1Ref}
+        d="M 60 10 L 10 70 L 60 130"
+        stroke="currentColor"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      {/* Right bracket > */}
+      <path
+        ref={path2Ref}
+        d="M 60 10 L 110 70 L 60 130"
+        stroke="currentColor"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        opacity="0.45"
+      />
+    </svg>
+  );
+}
+
+// ── Hero Background lines (GSAP) ─────────────
+function HeroBgLines() {
+  const linesRef = useRef<SVGGElement>(null);
+  useEffect(() => {
+    if (!linesRef.current) return;
+    gsap.to(linesRef.current.children, {
+      y: -30,
+      opacity: 0.04,
+      stagger: 0.4,
+      duration: 4,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut",
+    });
+  }, []);
+
+  return (
+    <svg className="hero-bg-lines" aria-hidden="true" preserveAspectRatio="none" viewBox="0 0 1440 900">
+      <g ref={linesRef} stroke="currentColor" strokeWidth="1" opacity="0.06">
+        {Array.from({ length: 14 }, (_, i) => (
+          <line key={i} x1="0" y1={60 + i * 60} x2="1440" y2={60 + i * 60} />
+        ))}
+      </g>
+    </svg>
+  );
+}
+
+// ── Hero content ─────────────────────────────
 interface HeroProps {
   onNavigate: (id: string) => void;
 }
 
 export function Hero({ onNavigate }: HeroProps) {
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [ghFollowers, setGhFollowers] = useState<number | null>(null);
+  const [ghRepos, setGhRepos] = useState<number | null>(null);
+
+  // GSAP reveal on mount
+  useEffect(() => {
+    if (!contentRef.current) return;
+    gsap.from(contentRef.current.children, {
+      opacity: 0,
+      y: 32,
+      stagger: 0.08,
+      duration: 0.7,
+      delay: 0.1,
+      ease: "power3.out",
+    });
+  }, []);
+
+  // GitHub stats
+  useEffect(() => {
+    fetchGitHubProfile().then((profile) => {
+      if (profile) {
+        setGhFollowers(profile.followers);
+        setGhRepos(profile.public_repos);
+      }
+    });
+  }, []);
+
+  const STATS = [
+    { v: "15+", l: "APIs", isNumber: false },
+    { v: "0", l: "Dependencies", isNumber: false },
+    { v: "100%", l: "TypeScript", isNumber: false },
+    {
+      v: ghFollowers !== null ? ghFollowers : null,
+      l: "GitHub Followers",
+      isNumber: true,
+      fallback: "—",
+    },
+  ];
+
   return (
-    <section className="hero-v2">
-      {/* ── Background layers ── */}
-      <div className="hero-v2-bg">
-        {/* Subtle mesh gradient */}
-        <div className="hero-mesh-gradient" />
-        {/* Animated dot grid */}
+    <section className="hero-bw">
+      {/* Background */}
+      <div className="hero-bw-bg" aria-hidden="true">
+        <HeroBgLines />
+        {/* Noise grain */}
+        <div className="hero-noise" />
+        {/* Subtle radial spotlight */}
+        <div className="hero-spotlight" />
+        {/* Dot grid */}
         <svg className="hero-dot-grid" aria-hidden="true">
           <defs>
-            <pattern
-              id="hero-dots"
-              x="0"
-              y="0"
-              width="30"
-              height="30"
-              patternUnits="userSpaceOnUse"
-            >
-              <circle cx="1" cy="1" r="1" fill="rgba(255,255,255,0.06)" />
+            <pattern id="hero-dots-bw" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
+              <circle cx="1" cy="1" r="1" fill="currentColor" opacity="0.07" />
             </pattern>
-            <radialGradient id="hero-dot-mask" cx="50%" cy="50%" r="50%">
+            <radialGradient id="hero-dot-fade" cx="50%" cy="50%" r="60%">
               <stop offset="0%" stopColor="white" stopOpacity="1" />
-              <stop offset="70%" stopColor="white" stopOpacity="0.3" />
               <stop offset="100%" stopColor="white" stopOpacity="0" />
             </radialGradient>
-            <mask id="hero-dot-mask-m">
-              <rect width="100%" height="100%" fill="url(#hero-dot-mask)" />
+            <mask id="hero-dot-mask-bw">
+              <rect width="100%" height="100%" fill="url(#hero-dot-fade)" />
             </mask>
           </defs>
-          <rect
-            width="100%"
-            height="100%"
-            fill="url(#hero-dots)"
-            mask="url(#hero-dot-mask-m)"
-          />
+          <rect width="100%" height="100%" fill="url(#hero-dots-bw)" mask="url(#hero-dot-mask-bw)" />
         </svg>
-        {/* Radial glow blobs */}
-        <div className="hero-glow-blob hero-glow-blue" />
-        <div className="hero-glow-blob hero-glow-purple" />
-        <div className="hero-glow-blob hero-glow-teal" />
-        {/* Meteors */}
-        <MeteorShower count={18} />
       </div>
 
-      {/* ── Content ── */}
-      <div className="hero-v2-inner">
+      {/* Content */}
+      <div ref={contentRef} className="hero-bw-inner">
         {/* Badge */}
-        <motion.div
-          className="hero-v2-badge"
-          initial={{ opacity: 0, y: -8, scale: 0.9 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-        >
-          <motion.span
-            className="hero-badge-dot"
-            animate={{ scale: [1, 1.3, 1], opacity: [0.7, 1, 0.7] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          />
-          <Sparkles size={12} />
+        <div className="hero-bw-badge">
+          <span className="hero-badge-pulse" />
           <span>v2.2.0 · Open Source · TypeScript-first</span>
-          <span className="hero-badge-sep">|</span>
-          <Star size={11} />
-          <span>Star us on GitHub</span>
-        </motion.div>
+        </div>
+
+        {/* SVG bracket decoration */}
+        <div className="hero-bracket-wrap">
+          <BracketSvg />
+        </div>
 
         {/* Headline */}
-        <motion.h1
-          className="hero-v2-h1"
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2, ease: [0.4, 0, 0.2, 1] }}
-        >
+        <h1 className="hero-bw-h1">
           Browser APIs,
           <br />
           <RotatingWord />
-        </motion.h1>
+        </h1>
 
         {/* Subline */}
-        <motion.p
-          className="hero-v2-sub"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.45, ease: [0.4, 0, 0.2, 1] }}
-        >
+        <p className="hero-bw-sub">
           The ultimate TypeScript toolkit for modern web developers.
           <br />
           Clipboard, battery, geolocation, notifications &amp; more —
           <br />
-          <strong style={{ color: "var(--text-1)" }}>zero dependencies</strong>, fully typed, one import away.
-        </motion.p>
+          <strong>zero dependencies</strong>, fully typed, one import away.
+        </p>
 
         {/* Install command */}
         <InstallCommand />
 
         {/* CTA buttons */}
         <motion.div
-          className="hero-v2-actions"
+          className="hero-bw-actions"
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 1.1 }}
+          transition={{ delay: 1.05, duration: 0.5 }}
         >
-          <ShinyButton onClick={() => onNavigate("introduction")} variant="brand">
+          <button className="btn-bw-primary" onClick={() => onNavigate("introduction")}>
             Get Started <ArrowRight size={16} />
-          </ShinyButton>
-          <ShinyButton
+          </button>
+          <a
+            className="btn-bw-outline"
             href="https://github.com/dev-aditya-lab/webdev-power-kit"
-            variant="outline"
+            target="_blank"
+            rel="noopener"
           >
             <GithubIcon size={16} />
             Star on GitHub
-          </ShinyButton>
+          </a>
         </motion.div>
 
         {/* Quick stats */}
         <motion.div
-          className="hero-v2-quick-stats"
+          className="hero-bw-stats"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.4, duration: 0.6 }}
+          transition={{ delay: 1.35, duration: 0.6 }}
         >
-          {[
-            { v: "15+", l: "APIs" },
-            { v: "0", l: "Dependencies" },
-            { v: "100%", l: "TypeScript" },
-            { v: "MIT", l: "License" },
-          ].map((s) => (
-            <div key={s.l} className="hero-quick-stat">
-              <span className="hero-quick-val">{s.v}</span>
-              <span className="hero-quick-label">{s.l}</span>
+          {STATS.map((s) => (
+            <div key={s.l} className="hero-bw-stat">
+              <span className="hero-bw-stat-val">
+                {s.isNumber && s.v !== null ? (
+                  <StatCounter value={s.v as number} />
+                ) : (
+                  (s as { v: string | number | null; fallback?: string; isNumber: boolean }).isNumber
+                    ? ((s as { fallback?: string }).fallback ?? "—")
+                    : String(s.v)
+                )}
+              </span>
+              <span className="hero-bw-stat-label">{s.l}</span>
             </div>
           ))}
         </motion.div>
@@ -242,13 +325,13 @@ export function Hero({ onNavigate }: HeroProps) {
 
       {/* Scroll cue */}
       <motion.div
-        className="hero-v2-scroll-cue"
+        className="hero-scroll-cue"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.8, duration: 0.6 }}
+        transition={{ delay: 1.8 }}
       >
         <motion.div
-          animate={{ y: [0, 8, 0] }}
+          animate={{ y: [0, 9, 0] }}
           transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
           className="hero-scroll-mouse"
         >

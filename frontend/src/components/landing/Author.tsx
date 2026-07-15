@@ -1,9 +1,13 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Heart, Globe, Package } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Globe, Package, X as XSocialIcon, Link2, Mail } from "lucide-react";
 import Image from "next/image";
-import { Reveal } from "@/components/ui/Reveal";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { fetchGitHubProfile, type GitHubProfile } from "@/lib/github";
+
+gsap.registerPlugin(ScrollTrigger);
 
 function GithubIcon({ size = 16 }: { size?: number }) {
   return (
@@ -14,81 +18,129 @@ function GithubIcon({ size = 16 }: { size?: number }) {
 }
 
 export function Author() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [profile, setProfile] = useState<GitHubProfile | null>(null);
+
+  // Fetch GitHub profile
+  useEffect(() => {
+    fetchGitHubProfile().then(setProfile);
+  }, []);
+
+  // GSAP reveal
+  useEffect(() => {
+    const section = sectionRef.current;
+    const card = cardRef.current;
+    if (!section || !card) return;
+
+    // Set initial state
+    gsap.set(card, { opacity: 0, y: 48 });
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            gsap.to(card, {
+              opacity: 1,
+              y: 0,
+              duration: 0.8,
+              ease: "power3.out",
+            });
+            observer.unobserve(section);
+          }
+        });
+      },
+      { threshold: 0.05 }
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
+  const avatarSrc = profile?.avatar_url ?? "/webdev logo 1x1.png";
+
+  const socialLinks = [
+    { href: "https://devaditya.dev", icon: Globe, label: "devaditya.dev" },
+    { href: "https://github.com/dev-aditya-lab", icon: GithubIcon, label: "GitHub" },
+    { href: "https://www.npmjs.com/package/webdev-power-kit", icon: Package, label: "npm" },
+    { href: "https://x.com/dev_aditya_lab", icon: XSocialIcon, label: "X / Twitter" },
+    { href: "https://linkedin.com/in/dev-aditya-lab", icon: Link2, label: "LinkedIn" },
+    { href: "mailto:contact@devaditya.dev", icon: Mail, label: "Email" },
+  ];
+
   return (
-    <section className="author-section-v2">
-      <div className="author-section-bg-glow" />
+    <section ref={sectionRef} className="author-section-bw">
       <div className="author-inner">
-        <Reveal>
-          <div className="section-eyebrow" style={{ justifyContent: "center" }}>
-            <Heart size={14} style={{ color: "#f43f5e" }} />
+        {/* Heading */}
+        <div className="author-heading">
+          <p className="section-eyebrow" style={{ justifyContent: "center" }}>
+            <span className="hs-eyebrow-dot" />
             Meet the Creator
-          </div>
-          <h2 className="section-title" style={{ textAlign: "center" }}>
-            Built with passion by
-            <br />
-            <span className="text-gradient">Aditya Kumar Gupta</span>
+          </p>
+          <h2 className="author-h2">
+            Built with passion by<br />
+            <span className="hs-accent">Aditya Kumar Gupta</span>
           </h2>
-        </Reveal>
+        </div>
 
-        <Reveal delay={0.15}>
-          <motion.div
-            className="author-card-v2"
-            whileHover={{ borderColor: "rgba(59,158,255,0.45)", y: -3 }}
-            transition={{ duration: 0.2 }}
-          >
-            <div className="author-card-left">
-              <motion.div
-                className="author-avatar-wrap"
-                whileHover={{ scale: 1.05 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                <Image
-                  src="/webdev logo 1x1.png"
-                  alt="Aditya Kumar Gupta"
-                  width={90}
-                  height={90}
-                  style={{ borderRadius: "50%", objectFit: "cover" }}
-                />
-                {/* Online indicator */}
-                <div className="author-online-dot" />
-              </motion.div>
-            </div>
+        {/* Card */}
+        <div ref={cardRef} className="author-card-bw">
+          {/* Avatar */}
+          <div className="author-avatar-bw">
+            <Image
+              src={avatarSrc}
+              alt="Aditya Kumar Gupta"
+              width={96}
+              height={96}
+              style={{ borderRadius: "50%", objectFit: "cover" }}
+              unoptimized={avatarSrc.startsWith("https://")}
+            />
+            <div className="author-online-dot" />
+          </div>
 
-            <div className="author-card-right">
-              <h3 className="author-name-v2">Aditya Kumar Gupta</h3>
-              <p className="author-handle-v2">
-                <code>@dev-aditya-lab</code>
-              </p>
-              <p className="author-bio-v2">
-                Computer Science Engineer &amp; passionate Web Developer.
-                Creator of{" "}
-                <strong style={{ color: "var(--text-1)" }}>webdev-power-kit</strong>{" "}
-                and other open-source tools. Building developer tools that are
-                clean, typed, and production-ready — so you can ship faster.
-              </p>
-              <div className="author-links-v2">
-                {[
-                  { href: "https://devaditya.dev", icon: Globe, label: "devaditya.dev" },
-                  { href: "https://github.com/dev-aditya-lab", icon: GithubIcon, label: "GitHub" },
-                  { href: "https://www.npmjs.com/package/webdev-power-kit", icon: Package, label: "npm" },
-                ].map((link) => (
-                  <motion.a
-                    key={link.label}
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener"
-                    className="author-link-v2"
-                    whileHover={{ y: -2, scale: 1.04 }}
-                    whileTap={{ scale: 0.97 }}
-                  >
-                    <link.icon size={15} />
-                    {link.label}
-                  </motion.a>
-                ))}
+          {/* Info */}
+          <div className="author-info-bw">
+            <h3 className="author-name-bw">Aditya Kumar Gupta</h3>
+            <p className="author-handle-bw">
+              <code>@dev-aditya-lab</code>
+            </p>
+
+            {/* GitHub stats row */}
+            {profile && (
+              <div className="author-gh-stats">
+                <span className="author-gh-stat">
+                  <strong>{profile.followers}</strong> followers
+                </span>
+                <span className="author-gh-sep">·</span>
+                <span className="author-gh-stat">
+                  <strong>{profile.public_repos}</strong> public repos
+                </span>
               </div>
+            )}
+
+            <p className="author-bio-bw">
+              {profile?.bio ??
+                "Computer Science Engineer & passionate Web Developer. Creator of webdev-power-kit and other open-source tools."}
+            </p>
+
+            {/* Social links */}
+            <div className="author-links-bw">
+              {socialLinks.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target={link.href.startsWith("mailto:") ? undefined : "_blank"}
+                  rel="noopener noreferrer"
+                  className="author-link-bw"
+                  aria-label={link.label}
+                >
+                  <link.icon size={15} />
+                  <span>{link.label}</span>
+                </a>
+              ))}
             </div>
-          </motion.div>
-        </Reveal>
+          </div>
+        </div>
       </div>
     </section>
   );
