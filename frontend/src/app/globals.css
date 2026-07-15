@@ -3724,5 +3724,117 @@ a.nav-item.active .nav-item-icon { opacity: 1; color: var(--text-1); }
 
 /* ── Interactive Flow Diagram (Removed - replaced by .hs namespace) ── */
 
+/* ── Landing Navbar Links & Responsive ───────── */
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-left: 2rem;
+  flex: 1;
+}
+
+.navbar-link-btn {
+  color: var(--text-2);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s var(--ease);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.navbar-link-btn:hover {
+  color: var(--text-1);
+}
+
+.navbar-mobile-toggle {
+  display: none;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-2);
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: var(--t);
+  margin-left: 0.5rem;
+}
+
+.navbar-mobile-toggle:hover {
+  color: var(--text-1);
+  border-color: var(--border-2);
+}
+
+@media (max-width: 960px) {
+  .navbar-links {
+    display: none;
+  }
+  .navbar-github-btn span {
+    display: none;
+  }
+  .navbar-mobile-toggle {
+    display: flex;
+  }
+}
+
+/* Mobile Menu Drawer Overlay */
+.mobile-menu-overlay {
+  position: fixed;
+  top: var(--header-h);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 38;
+}
+
+.mobile-menu-drawer {
+  position: fixed;
+  top: var(--header-h);
+  left: 0;
+  right: 0;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  padding: 2rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  z-index: 39;
+}
+
+.mobile-menu-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.mobile-menu-link {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-2);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.mobile-menu-link:hover {
+  color: var(--text-1);
+}
+
+.mobile-menu-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1.5rem;
+}
+
+
 
 
